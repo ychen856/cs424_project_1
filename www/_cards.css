@@ -1,0 +1,91 @@
+// Custom Card Styling
+$cathybg : #00a54f;
+$cathlightGreen:#71bf44;
+
+.card {
+  color:#111;
+  margin:5px;
+  margin-bottom:0.1rem;
+  box-sizing: border-box;
+  background-color: blue;
+  &.border-title{    // add border title line
+    position: relative;
+    &::before{
+      content: '';
+      height: 50px;
+      width: 8px;
+      position: absolute;
+      top: 9px;
+      left: 0;
+      background-color: $cathlightGreen;
+      background-image: -webkit-gradient(linear,left top,left bottom,color-stop(10%,$cathlightGreen),to($cathybg));
+      background-image: linear-gradient(180deg,$cathlightGreen 10%,$cathybg 100%);
+    }
+
+  }
+  .sub-title{
+    .title{
+      font-size: 1.3rem;
+    }
+  }
+
+
+  .card-body{
+    padding:0.4rem 1rem;
+    z-index: 9;
+    height: auto;
+    min-height: 200px;
+  }
+
+
+
+  .card-header {
+    // Format Dropdowns in Card Headings
+    .dropdown {
+      line-height: 1;
+      .dropdown-menu {
+        line-height: 1.5;
+      }
+    }
+    // 各標題要大一點
+    h6{
+      font-size: 1.3rem;
+      text-shadow: 0 2px white;
+    }
+  }
+  // Collapsable Card Styling
+  .card-header[data-toggle="collapse"] {
+    text-decoration: none;
+    position: relative;
+    padding: 0.75rem 3.25rem 0.75rem 1.25rem;
+    &::after {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding-right: 1.725rem;
+      line-height: 51px;
+      font-weight: 900;
+      content: '\f107';
+      font-family: 'Font Awesome 5 Free';
+      color: $gray-400;
+    }
+    &.collapsed {
+      border-radius: $card-border-radius;
+      &::after {
+        content: '\f105';
+      }
+    }
+  }
+  .card-body{
+    color:#111;
+    .sub-title{
+      .title{
+        font-size: 1.3rem;
+      }
+      .green-title{
+      }
+
+
+    }
+  }
+}
