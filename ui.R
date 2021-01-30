@@ -23,7 +23,7 @@ ui <- fluidPage(class="p-0 m-0",
            tags$ul(class="name p-0", 
                    tags$li(class="text-lg mt-auto mb-auto", "Yi-Chun Chen"))
            ),
-    tags$div( class="nav-card p-0",
+    tags$div( class="p-0",
     #tags$i(class="fab fa-accessible-icon card"),
     navbarPage("", 
         tabPanel("Plot", class="p-0", style="background-color: grey",
