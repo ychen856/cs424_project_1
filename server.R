@@ -1,6 +1,9 @@
 library(shiny)
 # Define server logic required to draw a histogram
 function(input, output) {
+  output$data <- renderTable({
+    mtcars[, c("mpg", input$variable, input$variable2, input$variable3, input$variable4, input$variable5), drop = FALSE]
+  }, rownames = TRUE)
   
   output$distPlot <- renderPlot({
     # generate bins based on input$bins from ui.R
