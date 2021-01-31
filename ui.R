@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(shinyWidgets)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(class="p-0 m-0",
@@ -15,10 +16,12 @@ ui <- fluidPage(class="p-0 m-0",
   tags$head(
     tags$style("@import url(https://use.fontawesome.com/releases/v5.7.2/css/all.css);")  
   ),
+  # Application title
+  title = "CS424 Project 1",
   tags$nav(class="head shadow p-0 m-0 pl-0",
-           tags$ul(class="title p-0 mr-auto", 
+           tags$ul(class="title p-0 mr-auto mt-0 mb-0", 
                    tags$li(
-                     tags$h1("CS424 Project 1")
+                     tags$p("CS424 Project 1")
                    )),
            tags$ul(class="name p-0", 
                    tags$li(class="text-lg mt-auto mb-auto", "Yi-Chun Chen"))
@@ -26,9 +29,12 @@ ui <- fluidPage(class="p-0 m-0",
     tags$div( class="p-0",
     #tags$i(class="fab fa-accessible-icon card"),
     navbarPage("", 
-        tabPanel("Plot", class="p-0", style="background-color: grey",
+        #Total Amount page start
+        tabPanel("Total Amount", class="p-0",
                  mainPanel( class="panel p-0",
                    fluidRow(
+                     
+                     #Total Amount of Energy generation start
                      column(8, class="p-0",
                         tags$div(class="card border-title shadow",
                             tags$div(class="card-body",
@@ -39,7 +45,7 @@ ui <- fluidPage(class="p-0 m-0",
                                         ),
                             
                             fluidRow(style="margin: 2px",
-                              column(3, style="background-color: white",
+                              column(2, style="background-color: white",
                                      tags$div(
                                        tags$div(class="subtitle",
                                          tags$i(class="fas fa-search"),
@@ -176,49 +182,104 @@ ui <- fluidPage(class="p-0 m-0",
                                                               "Wisconsin"="WI",	
                                                               "Wyoming"="WY"
                                                             ))
-                                       )
+                                       ),
+                                       tags$div(class="filter",
+                                                numericRangeInput(
+                                                  inputId = "noui1", label = "Year:",
+                                                  value = c(1990, 2019)
+                                                ),
+                                      ) #filter end
+                                      
                                      )
-                              ),
-                              column(9, style="background-color: pink",
-                                     tableOutput("data"))
+                              ), 
+                              
+                              column(10, 
+                                  tags$div(class="row",
+                                    column(6, 
+                                           tags$div(class="subtitle",
+                                                    tags$i(class="fas fa-chart-line"),
+                                                    "Line Chart:"
+                                           ),
+                                           tags$div(style="height: 330px; background-color: pink", "graph1")
+                                           
+                                    ),
+                                    column(6,
+                                           tags$div(class="subtitle",
+                                                    tags$i(class="fas fa-chart-bar"),
+                                                    "Stack Chart:"
+                                           ),
+                                           tags$div(style="height: 325px; background-color: pink", "graph2")
+                                    )
+                                  ),
+                                  tags$div(class="row",
+                                           column(12, 
+                                                  tags$div(class="subtitle",
+                                                           tags$i(class="fas fa-flag-usa"),
+                                                           "Heat Map:"
+                                                  ),
+                                                  tags$div(style="height: 320px; background-color: pink", "graph3")
+                                           )
+                                  )
+                                  
+                                  
+                                  
+                                  
+                              )
+                              
                             )
                             )
                         )
-                     ),
-                     column(4, class="p-0", style="background-color: blue",
-                            tags$div(class="card",
-                                     "zzzzz"
-                        )
-            
-                     )
+                     ),#Total Amount of Energy Generation end
+                     
+                     #Energy Generation Detail start
+                     column(4, class="p-0",
+                            tags$div(class="card border-title shadow",
+                                    tags$div(class="card-body",
+                                      tags$div(class="title",
+                                          tags$span(
+                                            "Energy Generation Detail")
+                                      ),
+                                      tags$div(style="height:720px",
+                                        tableOutput("data")
+                                      )
+                                    )
+                            )
+                        ) #Energy Generation Detail end
+
                    )
-                 )), 
-        tabPanel("Summary"),
-        tabPanel("Table")
+                 )), #Total Amount page end
+        
+        #Percentage page start
+        tabPanel("Percentage"), #Percentage page end
+        
+        #5 Interesting Things page start
+        tabPanel("5 Interesting Things"), #5 Interesting Things page end
+        
+        #About page start
+        tabPanel("About",
+                 tableOutput("data2")
+                 ) #About page end
     )
   ),
   
-  # Application title
-  title = "Diamonds Explorer",
-  
   # Sidebar with a slider input for number of bins
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("bins",
-                  "Number of bins:",
-                  min = 1,
-                  max = 50,
-                  value = 26)
-    ),
+  #sidebarLayout(
+  #  sidebarPanel(
+  #    sliderInput("bins",
+  #              "Number of bins:",
+  #                min = 1,
+  #                max = 50,
+  #                value = 26)
+  #  ),
     
     # Show a plot of the generated distribution
-    mainPanel(
-      fluidRow(
-        column(3, h4("ffffff")
-        ),
-        column(4, h4("KKKKKK"))
-      )
-    )
-  )
+  #  mainPanel(
+  #    fluidRow(
+  #      column(3, h4("ffffff")
+  #      ),
+  #      column(4, h4("KKKKKK"))
+  #    )
+  #  )
+  #)
 )
 
