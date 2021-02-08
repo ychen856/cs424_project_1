@@ -9,6 +9,7 @@
 
 library(shiny)
 library(shinyWidgets)
+source("global.R")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(class="p-0 m-0",
@@ -35,7 +36,7 @@ ui <- fluidPage(class="p-0 m-0",
                    fluidRow(
                      
                      #Total Amount of Energy generation start
-                     column(8, class="p-0",
+                     column(9, class="p-0",
                         tags$div(class="card border-title shadow",
                             tags$div(class="card-body",
                                      
@@ -51,145 +52,29 @@ ui <- fluidPage(class="p-0 m-0",
                                          tags$i(class="fas fa-search"),
                                          "Data Filter:"
                                        ),
+                                       
+                                       
+                                       #Energy source filter start
                                        tags$div(class="filter",
-                                         checkboxGroupInput("variable", "Energy source: ",
-                                                                   c("Cylinders" = "cyl",
-                                                                     "Transmission" = "am",
-                                                                     "Gears" = "gear"))
-                                        ),
+                                         checkboxGroupInput("energySourceInput", "Energy source: ", choices = c("Select All", energySource_dist), selected="Select All")
+                                        ), #energy source filter end
+                                       
+                                       
+                                       #date input start
                                        tags$div(class="filter",
-                                                selectInput("variable2", "Start Year:",
-                                                            c("Cylinders" = "cyl",
-                                                              "Transmission" = "am",
-                                                              "Gears" = "gear"))
-                                       ),
+                                                tags$table(class="select-year",
+                                                    tags$tr(
+                                                        tags$td(class="start-year",  numericInput(inputId="startYear", label = "Year: ", value = 1990, min = 1990, max = 2020, step = NA)),
+                                                        tags$td(class="text", "to"),
+                                                        tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2020, min = 1990, max = 2020, step = NA))
+                                                    )
+                                                )
+                                       ), #date input end
                                        tags$div(class="filter",
-                                                selectInput("variable3", "End Year:",
-                                                            c("Cylinders" = "cyl",
-                                                              "Transmission" = "am",
-                                                              "Gears" = "gear"))
-                                       ),
-                                       tags$div(class="filter",
-                                                selectInput("variable4", "First State: ",
-                                                                   c("Cylinders" = "cyl",
-                                                                     "Transmission" = "am",
-                                                                     "Gears" = "gear",
-                                                                     "Alabama"="AL",	
-                                                                     "Alaska"="AK",	
-                                                                     "Arizona"="AZ",	
-                                                                     "Arkansas"="AR",	
-                                                                     "California"="CA",	
-                                                                     "Colorado"="CO",	
-                                                                     "Connecticut"="CT",	
-                                                                     "Delaware"="DE",	
-                                                                     "Florida"="FL",	
-                                                                     "Georgia"="GA",	
-                                                                     "Hawaii"="HI",	
-                                                                     "Idaho"="ID",	
-                                                                     "Illinois"="IL",	
-                                                                     "Indiana"="IN",	
-                                                                     "Iowa"="IA",	
-                                                                     "Kansas"="KS",	
-                                                                     "Kentucky"="KY",	
-                                                                     "Louisiana"="LA",	
-                                                                     "Maine"="ME",	
-                                                                     "Maryland"="MD",	
-                                                                     "Massachusetts"="MA",	
-                                                                     "Michigan"="MI",	
-                                                                     "Minnesota"="MN",	
-                                                                     "Mississippi"="MS",	
-                                                                     "Missouri"="MO",	
-                                                                     "Montana"="MT",	
-                                                                     "Nebraska"="NE",	
-                                                                     "Nevada"="NV",	
-                                                                     "New Hampshire"="NH",	
-                                                                     "New Jersey"="NJ",	
-                                                                     "New Mexico"="NM",	
-                                                                     "New York"="NY",	
-                                                                     "North Carolina"="NC",	
-                                                                     "North Dakota"="ND",	
-                                                                     "Ohio"="OH",	
-                                                                     "Oklahoma"="OK",	
-                                                                     "Oregon"="OR",	
-                                                                     "Pennsylvania"="PA",	
-                                                                     "Rhode Island"="RI",	
-                                                                     "South Carolina"="SC",	
-                                                                     "South Dakota"="SD",	
-                                                                     "Tennessee"="TN",	
-                                                                     "Texas"="TX",	
-                                                                     "Utah"="UT",	
-                                                                     "Vermont"="VT",	
-                                                                     "Virginia"="VA",	
-                                                                     "Washington"="WA",	
-                                                                     "West Virginia"="WV",	
-                                                                     "Wisconsin"="WI",	
-                                                                     "Wyoming"="WY"
-                                                                     ))
-                                       ),
-                                       tags$div(class="filter",
-                                                selectInput("variable5", "Second State: ",
-                                                            c("Cylinders" = "cyl",
-                                                              "Transmission" = "am",
-                                                              "Gears" = "gear",
-                                                              "Alabama"="AL",	
-                                                              "Alaska"="AK",	
-                                                              "Arizona"="AZ",	
-                                                              "Arkansas"="AR",	
-                                                              "California"="CA",	
-                                                              "Colorado"="CO",	
-                                                              "Connecticut"="CT",	
-                                                              "Delaware"="DE",	
-                                                              "Florida"="FL",	
-                                                              "Georgia"="GA",	
-                                                              "Hawaii"="HI",	
-                                                              "Idaho"="ID",	
-                                                              "Illinois"="IL",	
-                                                              "Indiana"="IN",	
-                                                              "Iowa"="IA",	
-                                                              "Kansas"="KS",	
-                                                              "Kentucky"="KY",	
-                                                              "Louisiana"="LA",	
-                                                              "Maine"="ME",	
-                                                              "Maryland"="MD",	
-                                                              "Massachusetts"="MA",	
-                                                              "Michigan"="MI",	
-                                                              "Minnesota"="MN",	
-                                                              "Mississippi"="MS",	
-                                                              "Missouri"="MO",	
-                                                              "Montana"="MT",	
-                                                              "Nebraska"="NE",	
-                                                              "Nevada"="NV",	
-                                                              "New Hampshire"="NH",	
-                                                              "New Jersey"="NJ",	
-                                                              "New Mexico"="NM",	
-                                                              "New York"="NY",	
-                                                              "North Carolina"="NC",	
-                                                              "North Dakota"="ND",	
-                                                              "Ohio"="OH",	
-                                                              "Oklahoma"="OK",	
-                                                              "Oregon"="OR",	
-                                                              "Pennsylvania"="PA",	
-                                                              "Rhode Island"="RI",	
-                                                              "South Carolina"="SC",	
-                                                              "South Dakota"="SD",	
-                                                              "Tennessee"="TN",	
-                                                              "Texas"="TX",	
-                                                              "Utah"="UT",	
-                                                              "Vermont"="VT",	
-                                                              "Virginia"="VA",	
-                                                              "Washington"="WA",	
-                                                              "West Virginia"="WV",	
-                                                              "Wisconsin"="WI",	
-                                                              "Wyoming"="WY"
-                                                            ))
-                                       ),
-                                       tags$div(class="filter",
-                                                numericRangeInput(
-                                                  inputId = "noui1", label = "Year:",
-                                                  value = c(1990, 2019)
-                                                ),
-                                      ) #filter end
-                                      
+                                                selectizeInput(
+                                                  'request', 'States: ', choices = c("All States", state.name), selected="All States", multiple = TRUE
+                                                )
+                                       )
                                      )
                               ), 
                               
@@ -200,7 +85,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                     tags$i(class="fas fa-chart-line"),
                                                     "Line Chart:"
                                            ),
-                                           tags$div(style="height: 330px; background-color: pink", "graph1")
+                                           tags$div(style="height: 300px; background-color: pink", plotOutput("lineChart", height = 300))
                                            
                                     ),
                                     column(6,
@@ -208,16 +93,16 @@ ui <- fluidPage(class="p-0 m-0",
                                                     tags$i(class="fas fa-chart-bar"),
                                                     "Stack Chart:"
                                            ),
-                                           tags$div(style="height: 325px; background-color: pink", "graph2")
+                                           tags$div(style="height: 275px; background-color: pink", plotOutput("stackChart", height = 300))
                                     )
                                   ),
-                                  tags$div(class="row",
+                                  tags$div(class="row pt-5",
                                            column(12, 
                                                   tags$div(class="subtitle",
                                                            tags$i(class="fas fa-flag-usa"),
                                                            "Heat Map:"
                                                   ),
-                                                  tags$div(style="height: 320px; background-color: pink", "graph3")
+                                                  tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
                                            )
                                   )
                                   
@@ -232,15 +117,15 @@ ui <- fluidPage(class="p-0 m-0",
                      ),#Total Amount of Energy Generation end
                      
                      #Energy Generation Detail start
-                     column(4, class="p-0",
+                     column(3, class="p-0",
                             tags$div(class="card border-title shadow",
                                     tags$div(class="card-body",
                                       tags$div(class="title",
                                           tags$span(
                                             "Energy Generation Detail")
                                       ),
-                                      tags$div(style="height:720px",
-                                        tableOutput("data")
+                                      tags$div(style="height:700px",
+                                          DT::dataTableOutput("myTable")
                                       )
                                     )
                             )
