@@ -48,7 +48,7 @@ function(input, output, session) {
             geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/100000, color=ENERGY_SOURCE)) + 
             #scale_y_continuous(breaks = c(0, 1000000000, 2000000000, 3000000000, 4000000000, 5000000000, 6000000000, 7000000000, 8000000000), 
             #                  labels = c("0", "1,000 M", "2,000 M", "3,000 M", "4,000 M", "5,000 M", "6,000M", "7,000 M", "8,000M")) +
-            scale_color_manual(values = c("#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#de77ae", "#9970ab", "#f46d43", "#1a9850", "#66c2a5", "#3288bd", "#5e4fa2", "#40004b", "#762a83"), name = "text", labels = c('Coal', 'Hydroelectric Conventional', 'Natural Gas', 'Petroleum', 'Wind', 'Wood and Wood Derived Fuels', 'Nuclear', 'Other Biomass', 'Other Gases', 'Pumped Storage', 'Geothermal', 'Other', 'Solar Thermal and Photovoltaic')) +
+            scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
             scale_y_continuous(labels = scales::comma) +
             labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
         })
@@ -59,7 +59,7 @@ function(input, output, session) {
             geom_bar(position="stack" , stat="identity") + 
             #scale_y_continuous(breaks = c(0, 2500000000, 5000000000, 7500000000, 10000000000, 12500000000, 15000000000), labels = c("0", "2,500 M", "5,000 M", "7,500 M", "10,000 M", "12,500 M", "15,000 M")) +
             scale_y_continuous(labels = scales::comma) +
-            scale_fill_manual(values = c("#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#de77ae", "#9970ab", "#f46d43", "#1a9850", "#66c2a5", "#3288bd", "#5e4fa2", "#40004b", "#762a83"), name = "text", labels = c('Coal', 'Hydroelectric Conventional', 'Natural Gas', 'Petroleum', 'Wind', 'Wood and Wood Derived Fuels', 'Nuclear', 'Other Biomass', 'Other Gases', 'Pumped Storage', 'Geothermal', 'Other', 'Solar Thermal and Photovoltaic')) +
+            scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
             labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
         })
         
@@ -112,18 +112,30 @@ function(input, output, session) {
           #scale_y_continuous(breaks = c(0, 1000000000, 2000000000, 3000000000, 4000000000, 5000000000, 6000000000, 7000000000, 8000000000), 
           #                  labels = c("0", "1,000 M", "2,000 M", "3,000 M", "4,000 M", "5,000 M", "6,000M", "7,000 M", "8,000M")) +
           scale_color_manual(values = c("#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#de77ae", "#9970ab", "#f46d43", "#1a9850", "#66c2a5", "#3288bd", "#5e4fa2", "#40004b", "#762a83"), name = "text", labels = c('Coal', 'Hydroelectric Conventional', 'Natural Gas', 'Petroleum', 'Wind', 'Wood and Wood Derived Fuels', 'Nuclear', 'Other Biomass', 'Other Gases', 'Pumped Storage', 'Geothermal', 'Other', 'Solar Thermal and Photovoltaic')) +
-          scale_y_continuous(labels = scales::comma) +
+          scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
           labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
       })
       
       #stack chart
+      
+      
       output$stackChart_per <- renderPlot({
-        ggplot(subset(each_energy_per_year, (ENERGY_SOURCE %in% input$energySourceInput_per)), aes(fill=ENERGY_SOURCE, y=GENERATION/100000, x=YEAR)) +
-          geom_bar(position="stack" , stat="identity") + 
-          #scale_y_continuous(breaks = c(0, 2500000000, 5000000000, 7500000000, 10000000000, 12500000000, 15000000000), labels = c("0", "2,500 M", "5,000 M", "7,500 M", "10,000 M", "12,500 M", "15,000 M")) +
-          scale_y_continuous(labels = scales::comma) +
-          scale_fill_manual(values = c("#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#de77ae", "#9970ab", "#f46d43", "#1a9850", "#66c2a5", "#3288bd", "#5e4fa2", "#40004b", "#762a83"), name = "text", labels = c('Coal', 'Hydroelectric Conventional', 'Natural Gas', 'Petroleum', 'Wind', 'Wood and Wood Derived Fuels', 'Nuclear', 'Other Biomass', 'Other Gases', 'Pumped Storage', 'Geothermal', 'Other', 'Solar Thermal and Photovoltaic')) +
-          labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
+        
+        each_energy_per_year_per <- subset(each_energy_per_year, (ENERGY_SOURCE %in% input$energySourceInput_per))
+        each_energy_per_year_per$GENERATION_SUM_PER_YEAR <- ave(each_energy_per_year_per$GENERATION, each_energy_per_year_per$YEAR, FUN=sum)
+        ggplot(each_energy_per_year_per, aes(fill=ENERGY_SOURCE, y=GENERATION, x=YEAR)) + 
+          geom_bar(position="fill" , stat="identity") +
+          scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+          scale_y_continuous(labels = scales::percent) +
+          labs(x="YEAR", y = "AMOUNT", fill = "ENERGY SOURCE")
+        
+        
+        
+        #ggplot(subset(each_energy_per_year, (ENERGY_SOURCE %in% input$energySourceInput_per)), aes(fill=ENERGY_SOURCE, y=GENERATION/100000, x=YEAR)) +
+          #geom_bar(position="stack" , stat="identity") + 
+          #scale_y_continuous(labels = scales::comma) +
+          #scale_fill_manual(values = c("#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#de77ae", "#9970ab", "#f46d43", "#1a9850", "#66c2a5", "#3288bd", "#5e4fa2", "#40004b", "#762a83"), name = "text", labels = c('Coal', 'Hydroelectric Conventional', 'Natural Gas', 'Petroleum', 'Wind', 'Wood and Wood Derived Fuels', 'Nuclear', 'Other Biomass', 'Other Gases', 'Pumped Storage', 'Geothermal', 'Other', 'Solar Thermal and Photovoltaic')) +
+          #labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
       })
     })  
     
