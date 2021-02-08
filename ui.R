@@ -38,6 +38,7 @@ ui <- fluidPage(class="p-0 m-0",
                      #Total Amount of Energy generation start
                      column(9, class="p-0",
                         tags$div(class="card border-title shadow",
+                            #card Start
                             tags$div(class="card-body",
                                      
                                      tags$div(class="title",
@@ -57,85 +58,204 @@ ui <- fluidPage(class="p-0 m-0",
                                        #Energy source filter start
                                        tags$div(class="filter",
                                          checkboxGroupInput("energySourceInput", "Energy source: ", choices = c("Select All", energySource_dist), selected="Select All")
-                                        ), #energy source filter end
+                                        ) #energy source filter end
                                        
                                        
                                        #date input start
-                                       tags$div(class="filter",
-                                                tags$table(class="select-year",
-                                                    tags$tr(
-                                                        tags$td(class="start-year",  numericInput(inputId="startYear", label = "Year: ", value = 1990, min = 1990, max = 2020, step = NA)),
-                                                        tags$td(class="text", "to"),
-                                                        tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2020, min = 1990, max = 2020, step = NA))
-                                                    )
-                                                )
-                                       ), #date input end
-                                       tags$div(class="filter",
-                                                selectizeInput(
-                                                  'request', 'States: ', choices = c("All States", state.name), selected="All States", multiple = TRUE
-                                                )
-                                       )
+                                       #tags$div(class="filter",
+                                      #          tags$table(class="select-year",
+                                      #              tags$tr(
+                                      #                  tags$td(class="start-year",  numericInput(inputId="startYear", label = "Year: ", value = 1990, min = 1990, max = 2020, step = NA)),
+                                      #                  tags$td(class="text", "to"),
+                                      #                  tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2020, min = 1990, max = 2020, step = NA))
+                                      #              )
+                                      #          )
+                                      # ), #date input end
+                                      # tags$div(class="filter",
+                                      #          selectizeInput(
+                                      #            'request', 'States: ', choices = c("All States", state.name), selected="All States", multiple = TRUE
+                                      #          )
+                                      # )
                                      )
                               ), 
                               
                               column(10, 
                                   tags$div(class="row",
-                                    column(6, 
+                                    column(12, 
                                            tags$div(class="subtitle",
                                                     tags$i(class="fas fa-chart-line"),
                                                     "Line Chart:"
                                            ),
-                                           tags$div(style="height: 300px; background-color: pink", plotOutput("lineChart", height = 300))
+                                           tags$div(style="height: 390px;  background-color: pink", plotOutput("lineChart", height = 390))
                                            
-                                    ),
-                                    column(6,
-                                           tags$div(class="subtitle",
-                                                    tags$i(class="fas fa-chart-bar"),
-                                                    "Stack Chart:"
-                                           ),
-                                           tags$div(style="height: 275px; background-color: pink", plotOutput("stackChart", height = 300))
                                     )
+                                    #column(6,
+                                    #       tags$div(class="subtitle",
+                                    #                tags$i(class="fas fa-chart-bar"),
+                                    #                "Stack Chart:"
+                                    #       ),
+                                    #       tags$div(style="height: 400px; background-color: pink", plotOutput("stackChart", height = 400))
+                                    #)
                                   ),
-                                  tags$div(class="row pt-5",
-                                           column(12, 
+                                  tags$div(class="row",
+                                           column(12,
                                                   tags$div(class="subtitle",
-                                                           tags$i(class="fas fa-flag-usa"),
-                                                           "Heat Map:"
+                                                           tags$i(class="fas fa-chart-bar"),
+                                                           "Stack Chart:"
                                                   ),
-                                                  tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
+                                                  tags$div(style="height: 390px; background-color: pink", plotOutput("stackChart", height = 390))
                                            )
                                   )
-                                  
-                                  
-                                  
-                                  
+                                  #tags$div(class="row pt-5",
+                                  #         column(12, 
+                                  #                tags$div(class="subtitle",
+                                  #                         tags$i(class="fas fa-flag-usa"),
+                                  #                         "Heat Map:"
+                                  #                ),
+                                  #                tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
+                                  #         )
+                                  #)
                               )
                               
-                            )
-                            )
+                            )#End of fluid row
+                            )#End of card
                         )
                      ),#Total Amount of Energy Generation end
                      
-                     #Energy Generation Detail start
-                     column(3, class="p-0",
-                            tags$div(class="card border-title shadow",
-                                    tags$div(class="card-body",
-                                      tags$div(class="title",
-                                          tags$span(
-                                            "Energy Generation Detail")
-                                      ),
-                                      tags$div(style="height:700px",
-                                          DT::dataTableOutput("myTable")
-                                      )
-                                    )
+                    #Energy Generation Detail start
+                    column(3, class="p-0",
+                        tags$div(class="card border-title shadow",
+                            tags$div(class="card-body",
+                                tags$div(class="title",
+                                    tags$span(
+                                        "Energy Generation Detail")
+                                ),
+                                tags$div(style="height:850px; padding: 15px",
+                                    DT::dataTableOutput("myTable")
+                                )
                             )
-                        ) #Energy Generation Detail end
+                        )
+                    ) #Energy Generation Detail end
 
-                   )
-                 )), #Total Amount page end
+                )
+            )
+        ), #Total Amount page end
+        
         
         #Percentage page start
-        tabPanel("Percentage"), #Percentage page end
+        tabPanel("Percentage", class="p-0",
+                 mainPanel( class="panel p-0",
+                            fluidRow(
+                              
+                              #Total Amount of Energy generation start
+                              column(9, class="p-0",
+                                     tags$div(class="card border-title shadow",
+                                              #card Start
+                                              tags$div(class="card-body",
+                                                       
+                                                       tags$div(class="title",
+                                                                tags$span(
+                                                                  "Energy Generation in Percentage")
+                                                       ),
+                                                       
+                                                       fluidRow(style="margin: 2px",
+                                                                column(2, style="background-color: white",
+                                                                       tags$div(
+                                                                         tags$div(class="subtitle",
+                                                                                  tags$i(class="fas fa-search"),
+                                                                                  "Data Filter:"
+                                                                         ),
+                                                                         
+                                                                         
+                                                                         #Energy source filter start
+                                                                         tags$div(class="filter",
+                                                                                  checkboxGroupInput("energySourceInput_per", "Energy source: ", choices = c("Select All", energySource_dist), selected="Select All")
+                                                                         ) #energy source filter end
+                                                                         
+                                                                         
+                                                                         #date input start
+                                                                         #tags$div(class="filter",
+                                                                         #          tags$table(class="select-year",
+                                                                         #              tags$tr(
+                                                                         #                  tags$td(class="start-year",  numericInput(inputId="startYear", label = "Year: ", value = 1990, min = 1990, max = 2020, step = NA)),
+                                                                         #                  tags$td(class="text", "to"),
+                                                                         #                  tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2020, min = 1990, max = 2020, step = NA))
+                                                                         #              )
+                                                                         #          )
+                                                                         # ), #date input end
+                                                                         # tags$div(class="filter",
+                                                                         #          selectizeInput(
+                                                                         #            'request', 'States: ', choices = c("All States", state.name), selected="All States", multiple = TRUE
+                                                                         #          )
+                                                                         # )
+                                                                       )
+                                                                ), 
+                                                                
+                                                                column(10, 
+                                                                       tags$div(class="row",
+                                                                                column(12, 
+                                                                                       tags$div(class="subtitle",
+                                                                                                tags$i(class="fas fa-chart-line"),
+                                                                                                "Line Chart:"
+                                                                                       ),
+                                                                                       tags$div(style="height: 390px;  background-color: pink", plotOutput("lineChart_per", height = 390))
+                                                                                       
+                                                                                )
+                                                                                #column(6,
+                                                                                #       tags$div(class="subtitle",
+                                                                                #                tags$i(class="fas fa-chart-bar"),
+                                                                                #                "Stack Chart:"
+                                                                                #       ),
+                                                                                #       tags$div(style="height: 400px; background-color: pink", plotOutput("stackChart", height = 400))
+                                                                                #)
+                                                                       ),
+                                                                       tags$div(class="row",
+                                                                                column(12,
+                                                                                       tags$div(class="subtitle",
+                                                                                                tags$i(class="fas fa-chart-bar"),
+                                                                                                "Stack Chart:"
+                                                                                       ),
+                                                                                       tags$div(style="height: 390px; background-color: pink", plotOutput("stackChart_per", height = 390))
+                                                                                )
+                                                                       )
+                                                                       #tags$div(class="row pt-5",
+                                                                       #         column(12, 
+                                                                       #                tags$div(class="subtitle",
+                                                                       #                         tags$i(class="fas fa-flag-usa"),
+                                                                       #                         "Heat Map:"
+                                                                       #                ),
+                                                                       #                tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
+                                                                       #         )
+                                                                       #)
+                                                                )
+                                                                
+                                                       )#End of fluid row
+                                              )#End of card
+                                     )
+                              ),#Total Amount of Energy Generation end
+                              
+                              #Energy Generation Detail start
+                              column(3, class="p-0",
+                                     tags$div(class="card border-title shadow",
+                                              tags$div(class="card-body",
+                                                       tags$div(class="title",
+                                                                tags$span(
+                                                                  "Energy Generation Detail (%)")
+                                                       ),
+                                                       tags$div(style="height:850px; padding: 15px",
+                                                                DT::dataTableOutput("myTable_per")
+                                                       )
+                                              )
+                                     )
+                              ) #Energy Generation Detail end
+                              
+                            )
+                 )
+        
+                 
+                 
+                 
+        ), #Percentage page end
         
         #5 Interesting Things page start
         tabPanel("5 Interesting Things"), #5 Interesting Things page end
@@ -143,7 +263,7 @@ ui <- fluidPage(class="p-0 m-0",
         #About page start
         tabPanel("About",
                  tableOutput("data2")
-                 ) #About page end
+        ) #About page end
     )
   ),
   

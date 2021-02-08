@@ -43,6 +43,7 @@ for (val in year_dist)
 statistic$STATE <- NULL
 statistic$TYPE_OF_PRODUCER <- NULL
 statistic$GENERATION <- NULL 
+statistic$GENERATION_PERCENTAGE_IN_YEAR <- (statistic$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/statistic$GENERATION_SUM_PER_YEAR)
 
 theTable <- NULL
 
@@ -52,33 +53,4 @@ heatMapData$TYPE_OF_PRODUCER <- NULL
 heatMapData <- subset(heatMapData, STATE != "US-TOTAL" &STATE!= "US-Total")
 each_energy_per_year$GENERATION_SUM_PER_YEAR <- ave(each_energy_per_year$GENERATION, each_energy_per_year$YEAR, FUN=sum)
 
-dropdownButton <- function(label = "", status = c("default", "primary", "success", "info", "warning", "danger"), ..., width = NULL) {
-  
-  status <- match.arg(status)
-  # dropdown button content
-  html_ul <- list(
-    class = "dropdown-menu",
-    style = if (!is.null(width)) 
-      paste0("width: ", validateCssUnit(width), ";"),
-    lapply(X = list(...), FUN = tags$li, style = "margin-left: 10px; margin-right: 10px;")
-  )
-  # dropdown button apparence
-  html_button <- list(
-    class = paste0("btn btn-", status," dropdown-toggle"),
-    type = "button", 
-    `data-toggle` = "dropdown"
-  )
-  html_button <- c(html_button, list(label))
-  html_button <- c(html_button, list(tags$span(class = "caret")))
-  # final result
-  tags$div(
-    class = "dropdown",
-    do.call(tags$button, html_button),
-    do.call(tags$ul, html_ul),
-    tags$script(
-      "$('.dropdown-menu').click(function(e) {
-      e.stopPropagation();
-});")
-  )
-}
-
+scale_fill_manual(values = c("red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "pink"), name = "text", labels = c('Total Electric Power Industry', 'Electric Generators, Electric Utilities', 'Combined Heat and Power, Industrial Power', 'Combined Heat and Power, Commercial Power', 'Electric Generators, Independent Power Producers', 'Combined Heat and Power, Electric Power'))
