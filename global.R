@@ -8,7 +8,7 @@ names(utility)[5] <- c("GENERATION")
 
 utility$GENERATION <- as.numeric(gsub(",", "", utility$GENERATION)) #convert generation from char to number
 utility$GENERATION[utility$GENERATION < 0] <- 0
-utility <- subset(utility, str_squish(utility$STATE) != "" & !is.null(utility$STATE))
+utility <- subset(utility, str_squish(utility$STATE) != "" & !is.null(utility$STATE) & STATE != "US-TOTAL" &STATE!= "US-Total")
 
 producer_dist <- unique(utility$TYPE_OF_PRODUCER)
 energySource_dist <- unique(subset(utility$ENERGY_SOURCE, utility$ENERGY_SOURCE != "Total")) #list all the type of producer
@@ -51,8 +51,8 @@ theTable <- NULL
 heatMapData <- subset(utility, ENERGY_SOURCE != "Total")
 heatMapData$TYPE_OF_PRODUCER <- NULL
 heatMapData <- subset(heatMapData, STATE != "US-TOTAL" &STATE!= "US-Total")
-heatMapData$GENERATION_SUM_PER_STATE <- ave(heatMapData$GENERATION, heatMapData$STATE, heatMapData$YEAR, heatMapData$ENERGY_SOURCE, FUN=sum)
-heatMapData$GENERATION_SUM_PER_STATE_Milli <- heatMapData$GENERATION_SUM_PER_STATE / 1000000
+heatMapData$GENERATION_SUM_PER_SOURCE_STATE <- ave(heatMapData$GENERATION, heatMapData$STATE, heatMapData$YEAR, heatMapData$ENERGY_SOURCE, FUN=sum)
+heatMapData$GENERATION_SUM_PER_SOURCE_STATE_Milli <- heatMapData$GENERATION_SUM_PER_SOURCE_STATE / 1000000
 heatMapData$GENERATION <- NULL 
 heatMapData$state <- heatMapData$STATE
 

@@ -8,17 +8,6 @@ library(usmap)
 source("global.R")
 
 
-
-p2 <- ggplot(each_energy_per_year, aes(fill=ENERGY_SOURCE, y=GENERATION, x=YEAR)) +
-   geom_bar(position="stack" , stat="identity") + 
-   scale_y_continuous(breaks = c(5000000000, 10000000000, 15000000000), labels = c("5,000 M", "10,000 M", "15,000 M")) +
-   labs(x="YEAR", y = "AMOUNT", fill = "ENERGY SOURCE")
-    #+ theme(legend.position="bottom")
-
-
-p3 <- ggplot(statistic) + geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR, color=ENERGY_SOURCE))
-
-
 # Define server logic required to draw a histogram
 function(input, output, session) {
     ############## Page 1 (Total Amount)############
@@ -89,7 +78,6 @@ function(input, output, session) {
       
       #plot
       #line chart
-      statistic_per <- statistic
       output$lineChart_per <- renderPlot ({
         ggplot(subset(statistic, (ENERGY_SOURCE %in% input$energySourceInput_per))) + 
           geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/GENERATION_SUM_PER_YEAR, color=ENERGY_SOURCE)) + 
@@ -192,6 +180,20 @@ function(input, output, session) {
         comparisonTable2$GENERATION_SUM_PER_YEAR <- ave(comparisonTable2$GENERATION, comparisonTable2$YEAR, FUN=sum)
         comparisonTable2$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- ave(comparisonTable2$GENERATION, comparisonTable2$ENERGY_SOURCE, comparisonTable2$YEAR, FUN=sum)
         
+        heatMapDataState1 <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% theSourceInputCom & heatMapData$YEAR == input$firstYearInput)
+        heatMapDataState1$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState1$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState1$STATE, FUN=sum)
+        heatMapDataState1$ENERGY_SOURCE <- NULL
+        heatMapDataState1$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+        heatMapDataState1$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+        heatMapDataState1 <- heatMapDataState1[!duplicated(heatMapDataState1),]
+        
+        heatMapDataState2 <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% theSourceInputCom & heatMapData$YEAR == input$secondYearInput)
+        heatMapDataState2$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState2$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState2$STATE, FUN=sum)
+        heatMapDataState2$ENERGY_SOURCE <- NULL
+        heatMapDataState2$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+        heatMapDataState2$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+        heatMapDataState2 <- heatMapDataState2[!duplicated(heatMapDataState2),]
+        
         
         #calculate ylim
         theLineYlim = ifelse(max(comparisonTable1$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/100000, na.rm = TRUE),
@@ -201,6 +203,11 @@ function(input, output, session) {
         theStackYlim = ifelse(max(comparisonTable1$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
                               max(comparisonTable1$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
                               max(comparisonTable2$GENERATION_SUM_PER_YEAR/1000000))
+        
+        theHeatLegendLim = ifelse(max(heatMapDataState1$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE) > max(heatMapDataState2$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                  max(heatMapDataState1$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                  max(heatMapDataState2$GENERATION_SUM_PER_STATE_Milli))
+        
         
         #plot first state
         #line chart
@@ -225,46 +232,12 @@ function(input, output, session) {
               scale_y_continuous(labels = scales::comma)
         })
         
-        
-        heatMapDataState1 <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% theSourceInputCom & heatMapData$YEAR == input$firstYearInput)
-        
-        #print(heatMapData)
-        
-        
-        heatMapPlot <- ggplot(heatMapData, aes(map_id = STATE)) + 
-          geom_map(aes(fill = GENERATION_SUM_PER_STATE), map = fifty_states, colour = "white") + 
-          #geom_map(map = subset(fifty_states, id %in% c('illinois', 'new york')),fill = NA, colour = "blue") +
-          expand_limits(x = fifty_states$long, y = fifty_states$lat) +
-          coord_map() + scale_fill_gradient(low="#ff867c", high="#b61827")
-        
-        
-        
-        output$usMap <- renderPlot ({
-          heatMapPlot + scale_x_continuous(breaks = NULL) + 
-            scale_y_continuous(breaks = NULL) +
-            labs(x = "", y = "") +
-            theme(panel.background = element_blank()) +
-            fifty_states_inset_boxes()
-        })
-        
-        
-        
-        
-        
         #heat map
         output$firstStateHeatMap <- renderPlot({
-            plot_usmap(data = heatMapDataState1, values = "GENERATION_SUM_PER_STATE_Milli") + 
-              scale_fill_gradient(low="#ff867c", high="#b61827") +
-              scale_fill_continuous(
-                low = "white", high = "red", name = "AMOUNT (Million)", label = scales::comma
-              ) +
+            p_firstState <- plot_usmap(data = heatMapDataState1, values = "GENERATION_SUM_PER_STATE_Milli") + 
+              theme(legend.position = "right")
+            heatMapLegend(p_firstState, theHeatLegendLim)
             
-            scale_fill_continuous(
-              low = "white", high = "red", name = "AMOUNT (Million)", label = scales::comma
-            ) +
-            theme(legend.position = "right")
-              #scale_size_continuous(range = c(1, 16), name = "AMOUNT (Million)", label = scales::comma) 
-            #print(heatMapData)
         })
         
         
@@ -291,11 +264,252 @@ function(input, output, session) {
             lims(y=c(0, theStackYlim)) +
             scale_y_continuous(labels = scales::comma)
         })
+        
+        #heat map
+        output$secondStateHeatMap <- renderPlot({
+          p_secondState <- plot_usmap(data = heatMapDataState2, values = "GENERATION_SUM_PER_STATE_Milli") + 
+            theme(legend.position = "right")
+          heatMapLegend(p_secondState, theHeatLegendLim)
+          
+        })
     }
     
     
     
     
+    
+    ############## Comparison page 2 ###############
+    observeEvent(input$energySourceInputCom_per, { 
+      generatePlot_per()
+    })
+    
+    observeEvent(input$fisrtStateInput_per, {  
+      generatePlot_per()
+    })
+    
+    observeEvent(input$firstYearInput_per, {
+      generatePlot_per()
+    })
+    
+    observeEvent(input$secondStateInput_per, {
+      generatePlot_per()
+    })
+    
+    observeEvent(input$secondYearInput_per, {
+      generatePlot_per()
+    })
+    
+    
+    generatePlot_per <- function(){
+      #condition 1: energy source
+      if(input$energySourceInputCom_per == "All")  {
+        theSourceInputCom_per <- energySource_dist
+      }
+      else {
+        theSourceInputCom_per <- input$energySourceInputCom_per
+      }
+      
+      #condition 2: state
+      #state 1
+      if(input$fisrtStateInput_per == "All States") {
+        theFirstStateInput_per <- state_dist
+        #comparisonTable1_per <- each_energy_per_year
+      }
+      else if (input$fisrtStateInput_per == "Washington DC"){
+        theFirstStateInput_per <- "DC"
+        #comparisonTable1_per <- subset(each_energy_per_year, STATE == "DC")
+      }
+      else {
+        theFirstStateInput_per <- state.abb[which(state.name == input$fisrtStateInput_per)]
+        #comparisonTable1_per <- subset(each_energy_per_year, STATE == (state.abb[which(state.name == input$fisrtStateInput_per)]))
+      }
+      
+      #state 2
+      if(input$secondStateInput_per == "All States") {
+        theSecondStateInput_per <- state_dist
+      }
+      else if (input$secondStateInput_per == "Washington DC"){
+        theSecondStateInput_per <- "DC"
+      }
+      else {
+        theSecondStateInput_per <- state.abb[which(state.name == input$secondStateInput_per)]
+      }
+      
+      
+      #condition 3: year
+      #state 1
+      
+      comparisonTable_per <- each_energy_per_year
+      comparisonTable_per$GENERATION_SUM_PER_YEAR_STATE_PER <- ave(comparisonTable_per$GENERATION, comparisonTable_per$STATE, comparisonTable_per$YEAR, FUN=sum)
+      comparisonTable_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- ave(comparisonTable_per$GENERATION, comparisonTable_per$STATE, comparisonTable_per$YEAR, comparisonTable_per$ENERGY_SOURCE, FUN=sum)
+      
+      comparisonTable_per$TYPE_OF_PRODUCER <- NULL
+      comparisonTable_per$GENERATION <- NULL
+      comparisonTable_per$GENERATION_SUM_PER_YEAR <- NULL
+      comparisonTable_per$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- NULL
+      
+      if(input$fisrtStateInput_per != "All States") {
+          comparisonTable_per <- subset(comparisonTable_per, STATE %in% theFirstStateInput_per)
+          comparisonTable1_per <- comparisonTable_per[!duplicated(comparisonTable_per),]
+      }
+      else {
+          comparisonTable1_per <- statistic
+          comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- comparisonTable1_per$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR
+          comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_PER <- comparisonTable1_per$GENERATION_SUM_PER_YEAR
+      }
+      
+      if(input$secondStateInput_per != "All States") {
+        comparisonTable_per <- subset(comparisonTable_per, STATE %in% theSecondStateInput_per)
+        comparisonTable2_per <- comparisonTable_per[!duplicated(comparisonTable_per),]
+      }
+      else {
+        comparisonTable2_per <- statistic
+        comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- comparisonTable2_per$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR
+        comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_PER <- comparisonTable2_per$GENERATION_SUM_PER_YEAR
+      }
+      
+      
+      heatMapDataState1_per <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% theSourceInputCom_per & heatMapData$YEAR == input$firstYearInput_per)
+      heatMapDataState1_per$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState1_per$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState1_per$STATE, FUN=sum)
+      heatMapDataState1_per$ENERGY_SOURCE <- NULL
+      heatMapDataState1_per$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState1_per$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState1_per <- heatMapDataState1_per[!duplicated(heatMapDataState1_per),]
+      
+      heatMapDataState2_per <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% theSourceInputCom_per & heatMapData$YEAR == input$secondYearInput_per)
+      heatMapDataState2_per$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState2_per$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState2_per$STATE, FUN=sum)
+      heatMapDataState2_per$ENERGY_SOURCE <- NULL
+      heatMapDataState2_per$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState2_per$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState2_per <- heatMapDataState2_per[!duplicated(heatMapDataState2_per),]
+      
+      
+      #calculate ylim
+      theLineYlim_per = ifelse(max(comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE) > max(comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE),
+                           max(comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE),
+                           max(comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_PER))
+      
+      theStackYlim = ifelse(max(comparisonTable1_per$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2_per$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
+                            max(comparisonTable1_per$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
+                            max(comparisonTable2_per$GENERATION_SUM_PER_YEAR/1000000))
+      
+      theHeatLegendLim = ifelse(max(heatMapDataState1_per$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE) > max(heatMapDataState2_per$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                max(heatMapDataState1_per$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                max(heatMapDataState2_per$GENERATION_SUM_PER_STATE_Milli))
+      
+      
+      #plot first state
+      #line chart
+      output$firstStateLineChart_per <- renderPlot ({
+          ggplot(subset(comparisonTable1_per, (ENERGY_SOURCE %in% theSourceInputCom_per))) + 
+            geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+            geom_point(data = comparisonTable1_per[which(comparisonTable1_per$YEAR == input$firstYearInput_per & comparisonTable1_per$ENERGY_SOURCE %in% theSourceInputCom_per),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+            scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+            scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_per)) +
+            labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")
+      })
+      
+      #stack chart
+      #output$firstStateStackChart_per <- renderPlot({
+      #  ggplot(comparisonTable1_per, aes(fill=ENERGY_SOURCE, y=GENERATION/1000000, x=YEAR)) +
+      #    geom_bar(aes(alpha = YEAR == input$firstYearInput_per), position="stack" , stat="identity") + 
+      #    scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+      #    labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
+      #    scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 0.5), guide = F) +
+      #    lims(y=c(0, theStackYlim)) +
+      #    scale_y_continuous(labels = scales::comma)
+      #})
+      
+      #heat map
+      output$firstStateHeatMap_per <- renderPlot({
+        p_firstState <- plot_usmap(data = heatMapDataState1_per, values = "GENERATION_SUM_PER_STATE_Milli") + 
+          theme(legend.position = "right")
+        heatMapLegend(p_firstState, theHeatLegendLim)
+        
+      })
+      
+      
+      
+      #plot second state
+      #line chart
+      output$secondStateLineChart_per <- renderPlot ({
+        ggplot(subset(comparisonTable2_per, (ENERGY_SOURCE %in% theSourceInputCom_per))) + 
+          geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+          geom_point(data = comparisonTable2_per[which(comparisonTable2_per$YEAR == input$firstYearInput_per & comparisonTable2_per$ENERGY_SOURCE %in% theSourceInputCom_per),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+          scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+          scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_per)) +
+          labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE") 
+      })
+      
+      #stack chart
+      output$secondStateStackChart_per <- renderPlot({
+        ggplot(comparisonTable2_per, aes(fill=ENERGY_SOURCE, y=GENERATION/1000000, x=YEAR)) +
+          geom_bar(aes(alpha = YEAR == input$secondYearInput_per), position="stack" , stat="identity") + 
+          scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+          labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
+          scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 0.5), guide = F) +
+          lims(y=c(0, theStackYlim)) +
+          scale_y_continuous(labels = scales::comma)
+      })
+      
+      #heat map
+      output$secondStateHeatMap_per <- renderPlot({
+        p_secondState_per <- plot_usmap(data = heatMapDataState2_per, values = "GENERATION_SUM_PER_STATE_Milli") + 
+          theme(legend.position = "right")
+        heatMapLegend(p_secondState_per, theHeatLegendLim)
+        
+      })
+    }
+    
+    
+    
+    
+    
+    
+    heatMapLegend <- function(p_firstState, theHeatLegendLim) {
+      if(input$energySourceInputCom == "All") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#004a9f", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Coal") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#9e0142", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Hydroelectric Conventional") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#d53e4f", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Natural Gas") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#f46d43", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Petroleum") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#fdae61", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Wind") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#de77ae", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Wood and Wood Derived Fuels") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#9970ab", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Nuclear") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#f46d43", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Other Biomass") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#1a9850", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Other Gases") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#66c2a5", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Pumped Storage") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#3288bd", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Geothermal") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#5e4fa2", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Other") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#40004b", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+      else if (input$energySourceInputCom == "Solar Thermal and Photovoltaic") {
+        p_firstState + scale_fill_continuous(low = "white", high = "#762a83", name = "AMOUNT (Million)", label = scales::comma, limits = c(0, theHeatLegendLim))
+      }
+    }
     
     
     
