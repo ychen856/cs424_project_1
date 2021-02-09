@@ -51,6 +51,13 @@ theTable <- NULL
 heatMapData <- subset(utility, ENERGY_SOURCE != "Total")
 heatMapData$TYPE_OF_PRODUCER <- NULL
 heatMapData <- subset(heatMapData, STATE != "US-TOTAL" &STATE!= "US-Total")
+heatMapData$GENERATION_SUM_PER_STATE <- ave(heatMapData$GENERATION, heatMapData$STATE, heatMapData$YEAR, heatMapData$ENERGY_SOURCE, FUN=sum)
+heatMapData$GENERATION_SUM_PER_STATE_Milli <- heatMapData$GENERATION_SUM_PER_STATE / 1000000
+heatMapData$GENERATION <- NULL 
+heatMapData$state <- heatMapData$STATE
+
+heatMapData <- heatMapData[!duplicated(heatMapData),]
+
 each_energy_per_year$GENERATION_SUM_PER_YEAR <- ave(each_energy_per_year$GENERATION, each_energy_per_year$YEAR, FUN=sum)
 
-scale_fill_manual(values = c("red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "pink"), name = "text", labels = c('Total Electric Power Industry', 'Electric Generators, Electric Utilities', 'Combined Heat and Power, Industrial Power', 'Combined Heat and Power, Commercial Power', 'Electric Generators, Independent Power Producers', 'Combined Heat and Power, Electric Power'))
+
