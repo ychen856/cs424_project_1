@@ -5,6 +5,7 @@ library(tidyverse)
 library(fiftystater)
 library(scales)
 library(usmap)
+library(shinycssloaders)
 source("global.R")
 
 

@@ -59,23 +59,6 @@ ui <- fluidPage(class="p-0 m-0",
                                        tags$div(class="filter",
                                          checkboxGroupInput("energySourceInput", "Energy source: ", choices = c("Select All", energySource_dist), selected="Select All")
                                         ) #energy source filter end
-                                       
-                                       
-                                       #date input start
-                                       #tags$div(class="filter",
-                                      #          tags$table(class="select-year",
-                                      #              tags$tr(
-                                      #                  tags$td(class="start-year",  numericInput(inputId="startYear", label = "Year: ", value = 1990, min = 1990, max = 2020, step = NA)),
-                                      #                  tags$td(class="text", "to"),
-                                      #                  tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2020, min = 1990, max = 2020, step = NA))
-                                      #              )
-                                      #          )
-                                      # ), #date input end
-                                      # tags$div(class="filter",
-                                      #          selectizeInput(
-                                      #            'request', 'States: ', choices = c("All States", state.name), selected="All States", multiple = TRUE
-                                      #          )
-                                      # )
                                      )
                               ), 
                               
@@ -86,16 +69,12 @@ ui <- fluidPage(class="p-0 m-0",
                                                     tags$i(class="fas fa-chart-line"),
                                                     "Line Chart:"
                                            ),
-                                           tags$div(style="height: 390px;  background-color: pink", plotOutput("lineChart", height = 390))
-                                           
+                                           tags$div(style="height: 390px", 
+                                                shinycssloaders::withSpinner(
+                                                    plotOutput("lineChart", height = 390)
+                                                ) 
+                                            )
                                     )
-                                    #column(6,
-                                    #       tags$div(class="subtitle",
-                                    #                tags$i(class="fas fa-chart-bar"),
-                                    #                "Stack Chart:"
-                                    #       ),
-                                    #       tags$div(style="height: 400px; background-color: pink", plotOutput("stackChart", height = 400))
-                                    #)
                                   ),
                                   tags$div(class="row",
                                            column(12,
@@ -103,18 +82,13 @@ ui <- fluidPage(class="p-0 m-0",
                                                            tags$i(class="fas fa-chart-bar"),
                                                            "Stack Chart:"
                                                   ),
-                                                  tags$div(style="height: 390px; background-color: pink", plotOutput("stackChart", height = 390))
+                                                  tags$div(style="height: 390px", 
+                                                           shinycssloaders::withSpinner(
+                                                             plotOutput("stackChart", height = 390)
+                                                           )
+                                                  )
                                            )
                                   )
-                                  #tags$div(class="row pt-5",
-                                  #         column(12, 
-                                  #                tags$div(class="subtitle",
-                                  #                         tags$i(class="fas fa-flag-usa"),
-                                  #                         "Heat Map:"
-                                  #                ),
-                                  #                tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
-                                  #         )
-                                  #)
                               )
                               
                             )#End of fluid row
@@ -181,16 +155,13 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                                 tags$i(class="fas fa-chart-line"),
                                                                                                 "Line Chart:"
                                                                                        ),
-                                                                                       tags$div(style="height: 390px;  background-color: pink", plotOutput("lineChart_per", height = 390))
+                                                                                       tags$div(style="height: 390px", 
+                                                                                                shinycssloaders::withSpinner (
+                                                                                                    plotOutput("lineChart_per", height = 390)
+                                                                                                )
+                                                                                      )
                                                                                        
                                                                                 )
-                                                                                #column(6,
-                                                                                #       tags$div(class="subtitle",
-                                                                                #                tags$i(class="fas fa-chart-bar"),
-                                                                                #                "Stack Chart:"
-                                                                                #       ),
-                                                                                #       tags$div(style="height: 400px; background-color: pink", plotOutput("stackChart", height = 400))
-                                                                                #)
                                                                        ),
                                                                        tags$div(class="row",
                                                                                 column(12,
@@ -198,18 +169,13 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                                 tags$i(class="fas fa-chart-bar"),
                                                                                                 "Stack Chart:"
                                                                                        ),
-                                                                                       tags$div(style="height: 390px; background-color: pink", plotOutput("stackChart_per", height = 390))
+                                                                                       tags$div(style="height: 390px", 
+                                                                                                shinycssloaders::withSpinner (
+                                                                                                    plotOutput("stackChart_per", height = 390)
+                                                                                                )
+                                                                                      )
                                                                                 )
                                                                        )
-                                                                       #tags$div(class="row pt-5",
-                                                                       #         column(12, 
-                                                                       #                tags$div(class="subtitle",
-                                                                       #                         tags$i(class="fas fa-flag-usa"),
-                                                                       #                         "Heat Map:"
-                                                                       #                ),
-                                                                       #                tags$div(style="height: 300px; background-color: pink", plotOutput("usMap", height = 350))
-                                                                       #         )
-                                                                       #)
                                                                 )
                                                                 
                                                        )#End of fluid row
@@ -277,9 +243,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                       tags$div(class="filter, cust-text",
                                                           tags$table(class="select-year",
                                                               tags$tr(
-                                                                  tags$td(class="start-year",  numericInput(inputId="firstYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA)),
-                                                                  #tags$td(class="text", "to"),
-                                                                  #tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2019, min = 1990, max = 2019, step = NA))
+                                                                  tags$td(class="start-year",  numericInput(inputId="firstYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
                                                               )
                                                           )         
                                                       ) 
@@ -302,9 +266,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                       tags$div(class="filter, cust-text",
                                                           tags$table(class="select-year",
                                                               tags$tr(
-                                                                  tags$td(class="start-year",  numericInput(inputId="secondYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA)),
-                                                                  #tags$td(class="text", "to"),
-                                                                  #tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2019, min = 1990, max = 2019, step = NA))
+                                                                  tags$td(class="start-year",  numericInput(inputId="secondYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
                                                               )
                                                           )
                                                       ) 
@@ -336,8 +298,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-chart-line"),
                                                                                   "Line Chart:"
                                                                           ),
-                                                                          tags$div(style="height: 300px;  background-color: pink", 
-                                                                              plotOutput("firstStateLineChart", height = 300)
+                                                                          tags$div(style="height: 300px",
+                                                                              shinycssloaders::withSpinner(
+                                                                                  plotOutput("firstStateLineChart", height = 300)
+                                                                              )
                                                                           )
                                                                       )
                                                                 ), #Line Chart end
@@ -349,8 +313,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                             tags$i(class="fas fa-chart-bar"),
                                                                                 "Stack Chart:"
                                                                             ),
-                                                                            tags$div(style="height: 300px;  background-color: pink", 
-                                                                                plotOutput("firstStateStackChart", height = 300)
+                                                                            tags$div(style="height: 300px",
+                                                                                shinycssloaders::withSpinner(
+                                                                                    plotOutput("firstStateStackChart", height = 300)
+                                                                                )
                                                                             )
                                                                         )
                                                                 ), #Stack Chart End
@@ -362,8 +328,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                             tags$i(class="fas fa-flag-usa"),
                                                                                 "Heat Map:"
                                                                             ),
-                                                                            tags$div(style="height: 300px;  background-color: pink", 
-                                                                                plotOutput("firstStateHeatMap", height = 300)
+                                                                            tags$div(style="height: 300px",
+                                                                                shinycssloaders::withSpinner(
+                                                                                    plotOutput("firstStateHeatMap", height = 300)
+                                                                                )
                                                                             )
                                                                       )
                                                                 ) #Heat Map End
@@ -393,8 +361,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                 tags$i(class="fas fa-chart-line"),
                                                                                 "Line Chart:"
                                                                        ),
-                                                                       tags$div(style="height: 300px;  background-color: pink", 
-                                                                            plotOutput("secondStateLineChart", height = 300)
+                                                                       tags$div(style="height: 300px",
+                                                                            shinycssloaders::withSpinner(    
+                                                                                plotOutput("secondStateLineChart", height = 300)
+                                                                            )
                                                                        ) 
                                                                   )
                                                               ), #Line Chart end
@@ -406,8 +376,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                           tags$i(class="fas fa-chart-bar"),
                                                                               "Stack Chart:"
                                                                       ),
-                                                                      tags$div(style="height: 300px;  background-color: pink", 
-                                                                          plotOutput("secondStateStackChart", height = 300)
+                                                                      tags$div(style="height: 300px", 
+                                                                          shinycssloaders::withSpinner (
+                                                                              plotOutput("secondStateStackChart", height = 300)
+                                                                          )
                                                                       )
                                                                   )
                                                               ), #Stack Chart End
@@ -419,8 +391,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                           tags$i(class="fas fa-flag-usa"),
                                                                               "Heat Map:"
                                                                       ),
-                                                                      tags$div(style="height: 300px;  background-color: pink", 
-                                                                          plotOutput("secondStateHeatMap", height = 300)
+                                                                      tags$div(style="height: 300px",
+                                                                          shinycssloaders::withSpinner (
+                                                                              plotOutput("secondStateHeatMap", height = 300)
+                                                                          )
                                                                       )
                                                                   )
                                                               ) #Heat Map End
@@ -474,9 +448,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                        tags$div(class="filter, cust-text",
                                                                 tags$table(class="select-year",
                                                                            tags$tr(
-                                                                             tags$td(class="start-year",  numericInput(inputId="firstYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA)),
-                                                                             #tags$td(class="text", "to"),
-                                                                             #tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2019, min = 1990, max = 2019, step = NA))
+                                                                             tags$td(class="start-year",  numericInput(inputId="firstYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
                                                                            )
                                                                 )         
                                                        ) 
@@ -499,9 +471,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                        tags$div(class="filter, cust-text",
                                                                 tags$table(class="select-year",
                                                                            tags$tr(
-                                                                             tags$td(class="start-year",  numericInput(inputId="secondYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA)),
-                                                                             #tags$td(class="text", "to"),
-                                                                             #tags$td(class="end-year", numericInput(inputId="endYear", label = "", value = 2019, min = 1990, max = 2019, step = NA))
+                                                                             tags$td(class="start-year",  numericInput(inputId="secondYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
                                                                            )
                                                                 )
                                                        ) 
@@ -533,8 +503,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-chart-line"),
                                                                                   "Line Chart:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("firstStateLineChart_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("firstStateLineChart_per", height = 300)
+                                                                                  )
                                                                          )
                                                                        )
                                                                 ), #Line Chart end
@@ -546,8 +518,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-chart-bar"),
                                                                                   "Stack Chart:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("firstStateStackChart_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("firstStateStackChart_per", height = 300)
+                                                                                  )
                                                                          )
                                                                        )
                                                                 ), #Stack Chart End
@@ -559,8 +533,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-flag-usa"),
                                                                                   "Heat Map:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("firstStateHeatMap_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("firstStateHeatMap_per", height = 300)
+                                                                                  )
                                                                          )
                                                                        )
                                                                 ) #Heat Map End
@@ -590,8 +566,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-chart-line"),
                                                                                   "Line Chart:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("secondStateLineChart_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("secondStateLineChart_per", height = 300)
+                                                                                  )
                                                                          ) 
                                                                        )
                                                                 ), #Line Chart end
@@ -603,8 +581,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-chart-bar"),
                                                                                   "Stack Chart:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("secondStateStackChart_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("secondStateStackChart_per", height = 300)
+                                                                                  )
                                                                          )
                                                                        )
                                                                 ), #Stack Chart End
@@ -616,8 +596,10 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-flag-usa"),
                                                                                   "Heat Map:"
                                                                          ),
-                                                                         tags$div(style="height: 300px;  background-color: pink", 
-                                                                                  plotOutput("secondStateHeatMap_per", height = 300)
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("secondStateHeatMap_per", height = 300)
+                                                                                  )
                                                                          )
                                                                        )
                                                                 ) #Heat Map End
