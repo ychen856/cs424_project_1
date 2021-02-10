@@ -53,10 +53,13 @@ heatMapData$TYPE_OF_PRODUCER <- NULL
 heatMapData <- subset(heatMapData, STATE != "US-TOTAL" &STATE!= "US-Total")
 heatMapData$GENERATION_SUM_PER_SOURCE_STATE <- ave(heatMapData$GENERATION, heatMapData$STATE, heatMapData$YEAR, heatMapData$ENERGY_SOURCE, FUN=sum)
 heatMapData$GENERATION_SUM_PER_SOURCE_STATE_Milli <- heatMapData$GENERATION_SUM_PER_SOURCE_STATE / 1000000
+heatMapData$GENERATION_SUM_PER_STATE <- ave(heatMapData$GENERATION, heatMapData$STATE, heatMapData$YEAR, FUN=sum)
+heatMapData$GENERATION_RATIO_STATE_SOURCE <- heatMapData$GENERATION_SUM_PER_SOURCE_STATE/heatMapData$GENERATION_SUM_PER_STATE
 heatMapData$GENERATION <- NULL 
 heatMapData$state <- heatMapData$STATE
 
 heatMapData <- heatMapData[!duplicated(heatMapData),]
+#print(heatMapData)
 
 each_energy_per_year$GENERATION_SUM_PER_YEAR <- ave(each_energy_per_year$GENERATION, each_energy_per_year$YEAR, FUN=sum)
 
