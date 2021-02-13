@@ -215,7 +215,7 @@ ui <- fluidPage(class="p-0 m-0",
                               column(6, class = "p-0",
                                       tags$div(
                                           column(3, class = "p-5",
-                                              tags$div(
+                                              tags$div(class="p-5",
                                                   tags$div(class="filter, cust-text",
                                                       selectizeInput(
                                                           'energySourceInputCom', 'Select a energy source: ', choices = c("All", energySource_dist), selected="All", multiple = FALSE
@@ -420,7 +420,7 @@ ui <- fluidPage(class="p-0 m-0",
                               column(6, class = "p-0",
                                      tags$div(
                                        column(3, class = "p-5",
-                                              tags$div(
+                                              tags$div(class="p-5",
                                                 tags$div(class="filter, cust-text",
                                                          selectizeInput(
                                                            'energySourceInputCom_per', 'Select a energy source: ', choices = c("All", energySource_dist), selected="All", multiple = FALSE
@@ -616,7 +616,151 @@ ui <- fluidPage(class="p-0 m-0",
         
         
         #5 Interesting Things page start
-        tabPanel("5 Interesting Things"), #5 Interesting Things page end
+        tabPanel("5 Interesting Things", class="p-0",
+                 mainPanel( class="panel p-0",
+                            #Filter Start
+                            fluidRow(
+                              column(4),
+                              column(8, class = "p-0",
+                                     column(2),
+                                     column(2, class="p-0", tags$div(class="p-5",
+                                       actionButton("btn1", "Interesting thing 1"), 
+                                     )),
+                                     column(2, class="p-0", tags$div(class="p-5",
+                                       actionButton("btn2", "Interesting thing 2"), 
+                                     )),
+                                     column(2, class="p-0", tags$div(class="p-5",
+                                       actionButton("btn3", "Interesting thing 3"), 
+                                     )),
+                                     column(2, class="p-0", tags$div(class="p-5",
+                                       actionButton("btn4", "Interesting thing 4"), 
+                                     )),
+                                     column(2, class="p-0", tags$div(class="p-5",
+                                       actionButton("btn5", "Interesting thing 5"), 
+                                     ))
+                                     
+                              )
+                            ), #Filter End
+                            
+                            #State 1 Row start
+                            column(8, 
+                                fluidRow(
+                                    #Total Amount of Energy generation start
+                                    column(12, class="p-0",
+                                        tags$div(class="card border-title shadow",
+                                              #card Start
+                                              tags$div(class="card-body",
+                                                       
+                                                       tags$div(class="title",
+                                                                tags$span(
+                                                                  "Data 1")
+                                                       ),
+                                                       
+                                                       fluidRow(style="margin: 2px",
+                                                                #Chart1
+                                                                column(6, style="background-color: white",
+                                                                       tags$div(
+                                                                         tags$div(class="subtitle",
+                                                                                  "Chart 1:"
+                                                                         ),
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                      plotOutput("interestingChart1_1", height = 300)
+                                                                                  )
+                                                                         )
+                                                                       )
+                                                                ), #Line Chart end
+                                                                
+                                                                #Chart2
+                                                                column(6, 
+                                                                       tags$div(
+                                                                         tags$div(class="subtitle",
+                                                                                  "Chart 2:"
+                                                                         ),
+                                                                         tags$div(style="height: 300px",
+                                                                                  shinycssloaders::withSpinner (
+                                                                                    plotOutput("interestingChart1_2", height = 300)
+                                                                                  )
+                                                                         )
+                                                                       )
+                                                                )#Heat Map End
+                                                                
+                                                       )#End of fluid row
+                                              )#End of card
+                                         )
+                                    )#Total Amount of Energy Generation end
+                                ),#State 1 Row end
+                                #State 2 Row Start
+                                fluidRow(
+                                  #Total Amount of Energy generation start
+                                  column(12, class="p-0",
+                                         tags$div(class="card border-title shadow",
+                                                  #card Start
+                                                  tags$div(class="card-body",
+                                                           tags$div(class="title",
+                                                                    tags$span(
+                                                                      "Data 2")
+                                                           ),
+                                                           
+                                                           fluidRow(style="margin: 2px",
+                                                                    #Chart1
+                                                                    column(6, style="background-color: white",
+                                                                           tags$div(
+                                                                             tags$div(class="subtitle",
+                                                                                      "Chart 1:"
+                                                                             ),
+                                                                             tags$div(style="height: 300px",
+                                                                                      shinycssloaders::withSpinner (
+                                                                                        plotOutput("interestingChart2_1", height = 300)
+                                                                                      )
+                                                                             ) 
+                                                                           )
+                                                                    ), 
+                                                                    
+                                                                    #Chart2
+                                                                    column(6, 
+                                                                           tags$div(
+                                                                             tags$div(class="subtitle",
+                                                                                      "Chart 2:"
+                                                                             ),
+                                                                             tags$div(style="height: 300px",
+                                                                                      shinycssloaders::withSpinner (
+                                                                                        plotOutput("interestingChart2_2", height = 300)
+                                                                                      )
+                                                                             )
+                                                                           )
+                                                                    )
+                                                                    
+                                                           )#End of fluid row    
+                                                           
+                                                  )#End of card
+                                         )
+                                  )#Total Amount of Energy Generation end
+                                )#State 2 Row End
+                            ), 
+                            #discription start
+                            column(4, class="p-0",
+                                   tags$div(class="card border-title shadow",
+                                            #card Start
+                                            tags$div(class="card-body",
+                                                     
+                                                     tags$div(class="title",
+                                                              tags$span(
+                                                                "Description")
+                                                     ),
+                                                     tags$div(class="p-5", style="height: 750px",
+                                                       textOutput("discription")
+                                                     )
+                                            )
+                                   )
+                            ), #discription end
+
+                 )
+                 
+                 
+                 
+                 
+        ), #5 Interesting Things page end
         
         #About page start
         tabPanel("About",

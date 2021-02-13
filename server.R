@@ -37,10 +37,8 @@ function(input, output, session) {
         output$lineChart <- renderPlot ({
             ggplot(subset(statistic, (ENERGY_SOURCE %in% input$energySourceInput))) + 
             geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
-            #scale_y_continuous(breaks = c(0, 1000000000, 2000000000, 3000000000, 4000000000, 5000000000, 6000000000, 7000000000, 8000000000), 
-            #                  labels = c("0", "1,000 M", "2,000 M", "3,000 M", "4,000 M", "5,000 M", "6,000M", "7,000 M", "8,000M")) +
-            scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
-            scale_y_continuous(labels = scales::comma) +
+            scale_color_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#ffff6d", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
+            scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, NA), labels = scales::comma) + 
             labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE")
         })
         
@@ -48,9 +46,8 @@ function(input, output, session) {
         output$stackChart <- renderPlot({
           ggplot(subset(each_energy_per_year, (ENERGY_SOURCE %in% input$energySourceInput)), aes(fill=ENERGY_SOURCE, y=GENERATION/1000000, x=YEAR)) +
             geom_bar(position="stack" , stat="identity") + 
-            #scale_y_continuous(breaks = c(0, 2500000000, 5000000000, 7500000000, 10000000000, 12500000000, 15000000000), labels = c("0", "2,500 M", "5,000 M", "7,500 M", "10,000 M", "12,500 M", "15,000 M")) +
             scale_y_continuous(labels = scales::comma) +
-            scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+            scale_fill_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#ffff6d", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
             labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE")
         })
     })  
@@ -197,7 +194,7 @@ function(input, output, session) {
         
         
         #calculate ylim
-        theLineYlim = ifelse(max(comparisonTable1$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/100000, na.rm = TRUE),
+        theLineYlim = ifelse(max(comparisonTable1$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE),
                          max(comparisonTable1$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE),
                          max(comparisonTable2$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000))
         
@@ -218,8 +215,8 @@ function(input, output, session) {
             geom_point(data = comparisonTable1[which(comparisonTable1$YEAR == input$firstYearInput),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") +
             scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
             labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
-            lims(y=c(0, theLineYlim), x=c(1990, 2019)) +
-            scale_y_continuous(labels = scales::comma)
+            scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim + 0.1*theLineYlim), labels = scales::comma) + 
+            scale_x_continuous(limits = c(1990, 2019))
         })
         
         #stack chart
@@ -251,8 +248,8 @@ function(input, output, session) {
             geom_point(data = comparisonTable2[which(comparisonTable2$YEAR == input$secondYearInput),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
             scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
             labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
-            lims(y=c(0, theLineYlim)) +
-            scale_y_continuous(labels = scales::comma) 
+            scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim + 0.1*theLineYlim), labels = scales::comma) + 
+            scale_x_continuous(limits = c(1990, 2019))
         })
         
         #stack chart
@@ -384,6 +381,18 @@ function(input, output, session) {
       heatMapDataState2_per$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
       heatMapDataState2_per <- heatMapDataState2_per[!duplicated(heatMapDataState2_per),]
       
+      if(input$energySourceInputCom_per == "All") {
+          heatMapDataState1_per$GENERATION_RATIO_STATE_SOURCE<- NULL
+          heatMapDataState1_per <- heatMapDataState1_per[!duplicated(heatMapDataState1_per),]
+          heatMapDataState1_per$US_TOTAL <- ave(heatMapDataState1_per$GENERATION_SUM_PER_STATE, FUN=sum)
+          heatMapDataState1_per$GENERATION_RATIO_STATE_SOURCE <- heatMapDataState1_per$GENERATION_SUM_PER_STATE/heatMapDataState1_per$US_TOTAL
+        
+          heatMapDataState2_per$GENERATION_RATIO_STATE_SOURCE<- NULL
+          heatMapDataState2_per <- heatMapDataState2_per[!duplicated(heatMapDataState2_per),]
+          heatMapDataState2_per$US_TOTAL <- ave(heatMapDataState2_per$GENERATION_SUM_PER_STATE, FUN=sum)
+          heatMapDataState2_per$GENERATION_RATIO_STATE_SOURCE <- heatMapDataState2_per$GENERATION_SUM_PER_STATE/heatMapDataState2_per$US_TOTAL
+      }
+      #print(heatMapDataState2_per)
       
       #calculate ylim
       theLineYlim_per = ifelse(max(comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable1_per$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE) > max(comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable2_per$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE),
@@ -416,12 +425,17 @@ function(input, output, session) {
             labs(x="YEAR", y = "AMOUNT", fill = "ENERGY SOURCE")
       })
       
+      
       #heat map
       output$firstStateHeatMap_per <- renderPlot({
-        p_firstState <- plot_usmap(data = heatMapDataState1_per, values = "GENERATION_RATIO_STATE_SOURCE") + 
-          theme(legend.position = "right")
-        heatMapLegend(p_firstState, theHeatLegendLim, "percentage")
-        
+          p_firstState <- plot_usmap(data = heatMapDataState1_per, values = "GENERATION_RATIO_STATE_SOURCE") + 
+            theme(legend.position = "right")
+          if(input$energySourceInputCom_per == "All") {
+            heatMapLegend(p_firstState, NA, "percentage")
+          } 
+          else {
+            heatMapLegend(p_firstState, theHeatLegendLim, "percentage")
+          }
       })
       
       
@@ -447,14 +461,358 @@ function(input, output, session) {
             labs(x="YEAR", y = "AMOUNT", fill = "ENERGY SOURCE")
       })
       
+      
       #heat map
       output$secondStateHeatMap_per <- renderPlot({
         p_secondState_per <- plot_usmap(data = heatMapDataState2_per, values = "GENERATION_RATIO_STATE_SOURCE") + 
           theme(legend.position = "right")
-          heatMapLegend(p_secondState_per, theHeatLegendLim, "percentage")
-        
+        if(input$energySourceInputCom_per == "All") {
+            heatMapLegend(p_secondState_per, NA, "percentage")
+        } 
+        else {
+            heatMapLegend(p_secondState_per, theHeatLegendLim, "percentage")
+        }
       })
     }
+    
+    
+    
+    ################# 5 interesting things ###################
+    
+    observeEvent(input$btn1, {
+        energySource_int <- energySource_dist
+        firstState_int <- state_dist
+        firstYear_int <- 1990
+        secondState_int <- state_dist
+        secondYear_int <- 2019
+        generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int , 1)
+    })
+    observeEvent(input$btn2, {
+        energySource_int <- c("Natural Gas", "Coal")
+        firstState_int <- state_dist
+        firstYear_int <- 1990
+        secondState_int <- state_dist
+        secondYear_int <- 2019
+        generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int, 2)
+    })
+    observeEvent(input$btn3, {
+        energySource_int <- "Nuclear"
+        firstState_int <- state_dist
+        firstYear_int <- 1990
+        secondState_int <- state_dist
+        secondYear_int <- 2019
+        generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int, 3)
+    })
+    observeEvent(input$btn4, {
+        energySource_int <- "Wind"
+        firstState_int <- state_dist
+        firstYear_int <- 1990
+        secondState_int <- state_dist
+        secondYear_int <- 2019
+        generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int, 4)
+    })
+    observeEvent(input$btn5, {
+        energySource_int <- energySource_dist
+        firstState_int <- state_dist
+        firstYear_int <- 1990
+        secondState_int <- "Texas"
+        secondYear_int <- 2019
+        generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int, 5)
+    })
+    
+      #condition 3: year
+      #state 1
+    generatePlot_int <- function(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int, opt) {   
+      
+      #amount chart data
+      if(length(firstState_int) != 1) {
+        comparisonTable1_int_amt <- each_energy_per_year
+      }
+      else {
+        comparisonTable1_int_amt <- subset(each_energy_per_year, STATE == (state.abb[which(state.name == firstState_int)]))
+      }
+      
+      if(length(secondState_int) != 1) {
+        comparisonTable2_int_amt <- each_energy_per_year
+      }
+      else {
+        comparisonTable2_int_amt <- subset(each_energy_per_year, STATE == (state.abb[which(state.name == secondState_int)]))
+      }
+      
+      comparisonTable1_int_amt <- subset(comparisonTable1_int_amt, (ENERGY_SOURCE %in% energySource_int))  
+      comparisonTable1_int_amt$GENERATION_SUM_PER_YEAR <- ave(comparisonTable1_int_amt$GENERATION, comparisonTable1_int_amt$YEAR, FUN=sum)
+      comparisonTable1_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- ave(comparisonTable1_int_amt$GENERATION, comparisonTable1_int_amt$ENERGY_SOURCE, comparisonTable1_int_amt$YEAR, FUN=sum)
+      
+      comparisonTable2_int_amt <- subset(comparisonTable2_int_amt, (ENERGY_SOURCE %in% energySource_int))  
+      comparisonTable2_int_amt$GENERATION_SUM_PER_YEAR <- ave(comparisonTable2_int_amt$GENERATION, comparisonTable2_int_amt$YEAR, FUN=sum)
+      comparisonTable2_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- ave(comparisonTable2_int_amt$GENERATION, comparisonTable2_int_amt$ENERGY_SOURCE, comparisonTable2_int_amt$YEAR, FUN=sum)
+      
+      heatMapDataState1_int_amt <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% energySource_int & heatMapData$YEAR == firstYear_int)
+      heatMapDataState1_int_amt$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState1_int_amt$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState1_int_amt$STATE, FUN=sum)
+      heatMapDataState1_int_amt$ENERGY_SOURCE <- NULL
+      heatMapDataState1_int_amt$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState1_int_amt$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState1_int_amt <- heatMapDataState1_int_amt[!duplicated(heatMapDataState1_int_amt),]
+      
+      heatMapDataState2_int_amt <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% energySource_int & heatMapData$YEAR == secondYear_int)
+      heatMapDataState2_int_amt$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState2_int_amt$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState2_int_amt$STATE, FUN=sum)
+      heatMapDataState2_int_amt$ENERGY_SOURCE <- NULL
+      heatMapDataState2_int_amt$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState2_int_amt$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState2_int_amt <- heatMapDataState2_int_amt[!duplicated(heatMapDataState2_int_amt),]
+      
+      #calculate ylim
+      theLineYlim_int_amt = ifelse(max(comparisonTable1_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE),
+                           max(comparisonTable1_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, na.rm = TRUE),
+                           max(comparisonTable2_int_amt$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000))
+      
+      theStackYlim_int_amt = ifelse(max(comparisonTable1_int_amt$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE) > max(comparisonTable2_int_amt$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
+                            max(comparisonTable1_int_amt$GENERATION_SUM_PER_YEAR/1000000, na.rm = TRUE),
+                            max(comparisonTable2_int_amt$GENERATION_SUM_PER_YEAR/1000000))
+      
+      theHeatLegendLim_int_amt = ifelse(max(heatMapDataState1_int_amt$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE) > max(heatMapDataState2_int_amt$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                max(heatMapDataState1_int_amt$GENERATION_SUM_PER_STATE_Milli, na.rm = TRUE),
+                                max(heatMapDataState2_int_amt$GENERATION_SUM_PER_STATE_Milli))
+      
+      #percentage chart data
+      comparisonTable_int <- each_energy_per_year
+      comparisonTable_int$GENERATION_SUM_PER_YEAR_STATE_PER <- ave(comparisonTable_int$GENERATION, comparisonTable_int$STATE, comparisonTable_int$YEAR, FUN=sum)
+      comparisonTable_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- ave(comparisonTable_int$GENERATION, comparisonTable_int$STATE, comparisonTable_int$YEAR, comparisonTable_int$ENERGY_SOURCE, FUN=sum)
+      
+      comparisonTable_int$TYPE_OF_PRODUCER <- NULL
+      comparisonTable_int$GENERATION <- NULL
+      comparisonTable_int$GENERATION_SUM_PER_YEAR <- NULL
+      comparisonTable_int$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- NULL
+      
+      if(length(firstState_int) == 1) {
+        comparisonTable_int <- subset(comparisonTable_int, STATE %in% firstState_int)
+        comparisonTable1_int <- comparisonTable_int[!duplicated(comparisonTable_int),]
+      }
+      else {
+        comparisonTable1_int <- statistic
+        comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- comparisonTable1_int$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR
+        comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_PER <- comparisonTable1_int$GENERATION_SUM_PER_YEAR
+      }
+      
+      if(length(secondState_int) == 1) {
+        comparisonTable_int <- subset(comparisonTable_int, STATE %in% secondState_int)
+        comparisonTable2_int <- comparisonTable_int[!duplicated(comparisonTable_int),]
+      }
+      else {
+        comparisonTable2_int <- statistic
+        comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER <- comparisonTable2_int$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR
+        comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_PER <- comparisonTable2_int$GENERATION_SUM_PER_YEAR
+      }
+      
+      
+      heatMapDataState1_int <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% energySource_int & heatMapData$YEAR == firstYear_int)
+      heatMapDataState1_int$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState1_int$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState1_int$STATE, FUN=sum)
+      heatMapDataState1_int$ENERGY_SOURCE <- NULL
+      heatMapDataState1_int$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState1_int$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState1_int <- heatMapDataState1_int[!duplicated(heatMapDataState1_int),]
+      
+      heatMapDataState2_int <- subset(heatMapData, heatMapData$ENERGY_SOURCE %in% energySource_int & heatMapData$YEAR == secondYear_int)
+      heatMapDataState2_int$GENERATION_SUM_PER_STATE_Milli <- ave(heatMapDataState2_int$GENERATION_SUM_PER_SOURCE_STATE_Milli, heatMapDataState2_int$STATE, FUN=sum)
+      heatMapDataState2_int$ENERGY_SOURCE <- NULL
+      heatMapDataState2_int$GENERATION_SUM_PER_SOURCE_STATE <- NULL
+      heatMapDataState2_int$GENERATION_SUM_PER_SOURCE_STATE_Milli <- NULL
+      heatMapDataState2_int <- heatMapDataState2_int[!duplicated(heatMapDataState2_int),]
+      
+      if(length(energySource_int) != 1) {
+        heatMapDataState1_int$GENERATION_RATIO_STATE_SOURCE<- NULL
+        heatMapDataState1_int <- heatMapDataState1_int[!duplicated(heatMapDataState1_int),]
+        heatMapDataState1_int$US_TOTAL <- ave(heatMapDataState1_int$GENERATION_SUM_PER_STATE, FUN=sum)
+        heatMapDataState1_int$GENERATION_RATIO_STATE_SOURCE <- heatMapDataState1_int$GENERATION_SUM_PER_STATE/heatMapDataState1_int$US_TOTAL
+        
+        heatMapDataState2_int$GENERATION_RATIO_STATE_SOURCE<- NULL
+        heatMapDataState2_int <- heatMapDataState2_int[!duplicated(heatMapDataState2_int),]
+        heatMapDataState2_int$US_TOTAL <- ave(heatMapDataState2_int$GENERATION_SUM_PER_STATE, FUN=sum)
+        heatMapDataState2_int$GENERATION_RATIO_STATE_SOURCE <- heatMapDataState2_int$GENERATION_SUM_PER_STATE/heatMapDataState2_int$US_TOTAL
+      }
+      
+      #calculate ylim
+      theLineYlim_int = ifelse(max(comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE) > max(comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE),
+                               max(comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable1_int$GENERATION_SUM_PER_YEAR_STATE_PER, na.rm = TRUE),
+                               max(comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/comparisonTable2_int$GENERATION_SUM_PER_YEAR_STATE_PER))
+      
+      theHeatLegendLim_int = ifelse(max(heatMapDataState1_int$GENERATION_RATIO_STATE_SOURCE, na.rm = TRUE) > max(heatMapDataState2_int$GENERATION_RATIO_STATE_SOURCE, na.rm = TRUE),
+                                max(heatMapDataState1_int$GENERATION_RATIO_STATE_SOURCE, na.rm = TRUE),
+                                max(heatMapDataState2_int$GENERATION_RATIO_STATE_SOURCE))
+      
+      
+
+        if(opt == 1) {
+            output$interestingChart1_1 <- renderPlot({
+              ggplot(subset(comparisonTable1_int, (ENERGY_SOURCE %in% energySource_int))) + 
+                geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+                geom_point(data = comparisonTable1_int[which(comparisonTable1_int$YEAR == firstYear_int & comparisonTable1_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+                scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+                scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
+                labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")
+            })
+            output$interestingChart1_2 <- renderPlot({
+                p_firstState <- plot_usmap(data = heatMapDataState1_int, values = "GENERATION_RATIO_STATE_SOURCE") + 
+                  theme(legend.position = "right")
+              
+                heatMapLegend(p_firstState, theHeatLegendLim_int, "percentage")
+            })
+            output$interestingChart2_1 <- renderPlot({
+                ggplot(subset(comparisonTable2_int, (ENERGY_SOURCE %in% energySource_int))) + 
+                  geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+                  geom_point(data = comparisonTable2_int[which(comparisonTable2_int$YEAR == secondYear_int & comparisonTable2_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+                  scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+                  scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
+                  labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE") 
+            })
+            output$interestingChart2_2 <- renderPlot({
+                p_secondState_int <- plot_usmap(data = heatMapDataState2_int, values = "GENERATION_RATIO_STATE_SOURCE") + 
+                  theme(legend.position = "right")
+              
+                heatMapLegend(p_secondState_int, theHeatLegendLim_int, "percentage")
+            })
+        }
+        if(opt == 2) {
+          output$interestingChart1_1 <- renderPlot({
+            ggplot(comparisonTable1_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable1_int_amt[which(comparisonTable1_int_amt$YEAR == firstYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart1_2 <- renderPlot({
+            ggplot(subset(comparisonTable1_int, (ENERGY_SOURCE %in% energySource_int))) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable1_int[which(comparisonTable1_int$YEAR == firstYear_int & comparisonTable1_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
+              labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")
+          })
+          output$interestingChart2_1 <- renderPlot({
+            ggplot(comparisonTable2_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable2_int_amt[which(comparisonTable2_int_amt$YEAR == secondYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart2_2 <- renderPlot({
+            ggplot(subset(comparisonTable2_int, (ENERGY_SOURCE %in% energySource_int))) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable2_int[which(comparisonTable2_int$YEAR == secondYear_int & comparisonTable2_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
+              labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")
+          })
+        }
+        if(opt == 3) {
+          output$interestingChart1_1 <- renderPlot({
+            ggplot(comparisonTable1_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable1_int_amt[which(comparisonTable1_int_amt$YEAR == firstYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart1_2 <- renderPlot({
+            p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
+              theme(legend.position = "right")
+            heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")
+          })
+          output$interestingChart2_1 <- renderPlot({
+            ggplot(comparisonTable2_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable2_int_amt[which(comparisonTable2_int_amt$YEAR == secondYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart2_2 <- renderPlot({
+              p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
+                theme(legend.position = "right")
+              heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")
+          })
+        }
+        if(opt == 4) {
+          output$interestingChart1_1 <- renderPlot({
+            ggplot(comparisonTable1_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable1_int_amt[which(comparisonTable1_int_amt$YEAR == firstYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart1_2 <- renderPlot({
+            p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
+              theme(legend.position = "right")
+            heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")
+          })
+          output$interestingChart2_1 <- renderPlot({
+            ggplot(comparisonTable2_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable2_int_amt[which(comparisonTable2_int_amt$YEAR == secondYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart2_2 <- renderPlot({
+            p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
+              theme(legend.position = "right")
+            heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")
+          })
+        }
+        if(opt == 5) {
+          output$interestingChart1_1 <- renderPlot({
+            ggplot(comparisonTable1_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable1_int_amt[which(comparisonTable1_int_amt$YEAR == firstYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart1_2 <- renderPlot({
+            ggplot(comparisonTable1_int_amt, aes(fill=ENERGY_SOURCE, y=GENERATION/1000000, x=YEAR)) +
+              geom_bar(aes(alpha = YEAR == firstYear_int), position="stack" , stat="identity") + 
+              scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
+              scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 0.5), guide = F) +
+              lims(y=c(0, theStackYlim_int_amt)) +
+              scale_y_continuous(labels = scales::comma)
+          })
+          output$interestingChart2_1 <- renderPlot({
+            ggplot(comparisonTable2_int_amt) + 
+              geom_line(aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000, color=ENERGY_SOURCE)) + 
+              geom_point(data = comparisonTable2_int_amt[which(comparisonTable2_int_amt$YEAR == secondYear_int),], aes(x=YEAR, y=GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR/1000000), colour = "#004a9f") + 
+              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", colour = "ENERGY SOURCE") +
+              scale_y_continuous(expand = c(0, 0), limits = c(0, theLineYlim_int_amt + 0.1*theLineYlim_int_amt), labels = scales::comma) + 
+              scale_x_continuous(limits = c(1990, 2019))
+          })
+          output$interestingChart2_2 <- renderPlot({
+            ggplot(comparisonTable2_int_amt, aes(fill=ENERGY_SOURCE, y=GENERATION/1000000, x=YEAR)) +
+              geom_bar(aes(alpha = YEAR == secondYear_int), position="stack" , stat="identity") + 
+              scale_fill_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
+              scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 0.5), guide = F) +
+              lims(y=c(0, theStackYlim_int_amt)) +
+              scale_y_continuous(labels = scales::comma)
+          })
+          output$discription <- renderText({ 
+            "FFFFFFFFFFFFFFFFFFFFF"
+          })
+      }
+    }   
+    
+    
+    
     
     
     
