@@ -31,7 +31,7 @@ ui <- fluidPage(class="p-0 m-0",
     #tags$i(class="fab fa-accessible-icon card"),
     navbarPage("", 
         #Total Amount page start
-        tabPanel("Total Amount", class="p-0",
+        tabPanel("Overview - Amount", class="p-0",
                  mainPanel( class="panel p-0",
                    fluidRow(
                      
@@ -117,7 +117,7 @@ ui <- fluidPage(class="p-0 m-0",
         
         
         #Percentage page start
-        tabPanel("Percentage", class="p-0",
+        tabPanel("Overview - Percentage", class="p-0",
                  mainPanel( class="panel p-0",
                             fluidRow(
                               
@@ -207,7 +207,7 @@ ui <- fluidPage(class="p-0 m-0",
         ), #Percentage page end
         
         #Camparison page start
-        tabPanel("Comparison", class="p-0",
+        tabPanel("Comparison - Amount", class="p-0",
                  mainPanel( class="panel p-0",
                             #Filter Start
                             fluidRow(
@@ -243,7 +243,11 @@ ui <- fluidPage(class="p-0 m-0",
                                                       tags$div(class="filter, cust-text",
                                                           tags$table(class="select-year",
                                                               tags$tr(
-                                                                  tags$td(class="start-year",  numericInput(inputId="firstYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
+                                                                  tags$td(class="start-year",  
+                                                                    selectizeInput(
+                                                                      'firstYearInput', 'Year: ', choices = c("All Years", year_dist), selected="All Years", multiple = FALSE
+                                                                    )
+                                                                  )
                                                               )
                                                           )         
                                                       ) 
@@ -254,7 +258,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                      tags$div(
                                                        tags$div(class="filter, cust-text",
                                                                 selectizeInput(
-                                                                  'secondStateInput', 'Select the second states: ', choices = c("All States", state.name, "Washington DC"), selected="All States", multiple = FALSE
+                                                                  'secondStateInput', 'Select the second states: ', choices = c("All States", state.name, "Washington DC"), selected="Illinois", multiple = FALSE
                                                                 )
                                                        ) 
                                                      )
@@ -266,7 +270,11 @@ ui <- fluidPage(class="p-0 m-0",
                                                       tags$div(class="filter, cust-text",
                                                           tags$table(class="select-year",
                                                               tags$tr(
-                                                                  tags$td(class="start-year",  numericInput(inputId="secondYearInput", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
+                                                                  tags$td(class="start-year",  
+                                                                          selectizeInput(
+                                                                            'secondYearInput', 'Year: ', choices = c("All Years", year_dist), selected="All Years", multiple = FALSE
+                                                                          )
+                                                                  )
                                                               )
                                                           )
                                                       ) 
@@ -287,7 +295,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                        
                                                        tags$div(class="title",
                                                                 tags$span(
-                                                                  "First State")
+                                                                  "First Region")
                                                        ),
                                                        
                                                        fluidRow(style="margin: 2px",
@@ -328,13 +336,14 @@ ui <- fluidPage(class="p-0 m-0",
                                                                             tags$i(class="fas fa-flag-usa"),
                                                                                 "Heat Map:"
                                                                             ),
-                                                                            tags$div(style="height: 300px",
+                                                                            tags$div(style="height: 285px",
                                                                                 shinycssloaders::withSpinner(
-                                                                                    plotOutput("firstStateHeatMap", height = 300)
+                                                                                    plotOutput("firstStateHeatMap", height = 285)
                                                                                 )
                                                                             )
                                                                       )
-                                                                ) #Heat Map End
+                                                                ), #Heat Map End
+                                                                tags$span(style="float: right; font-size: smaller;",  "* Select a year to see the data")
                                                                 
                                                        )#End of fluid row
                                               )#End of card
@@ -350,7 +359,7 @@ ui <- fluidPage(class="p-0 m-0",
                                             tags$div(class="card-body",
                                                      tags$div(class="title",
                                                               tags$span(
-                                                                "First State")
+                                                                "Second Region")
                                                      ),
                                                      
                                                      fluidRow(style="margin: 2px",
@@ -391,13 +400,14 @@ ui <- fluidPage(class="p-0 m-0",
                                                                           tags$i(class="fas fa-flag-usa"),
                                                                               "Heat Map:"
                                                                       ),
-                                                                      tags$div(style="height: 300px",
+                                                                      tags$div(style="height: 285px",
                                                                           shinycssloaders::withSpinner (
-                                                                              plotOutput("secondStateHeatMap", height = 300)
+                                                                              plotOutput("secondStateHeatMap", height = 285)
                                                                           )
                                                                       )
                                                                   )
-                                                              ) #Heat Map End
+                                                              ), #Heat Map End
+                                                              tags$span(style="float: right; font-size: smaller;",  "* Select a year to see the data")
                                                               
                                                      )#End of fluid row    
                                                      
@@ -411,8 +421,8 @@ ui <- fluidPage(class="p-0 m-0",
         
         
         
-        # Comparison Percentate page start
-        tabPanel("Comparison Percentage", class="p-0",
+        # Comparison Percentage page start
+        tabPanel("Comparison - Percentage", class="p-0",
                  mainPanel( class="panel p-0",
                             #Filter Start
                             fluidRow(
@@ -448,7 +458,11 @@ ui <- fluidPage(class="p-0 m-0",
                                                        tags$div(class="filter, cust-text",
                                                                 tags$table(class="select-year",
                                                                            tags$tr(
-                                                                             tags$td(class="start-year",  numericInput(inputId="firstYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
+                                                                              tags$td(class="start-year",  
+                                                                                      selectizeInput(
+                                                                                        'firstYearInput_per', 'Year: ', choices = c("All Years", year_dist), selected="All Years", multiple = FALSE
+                                                                                      )
+                                                                              )
                                                                            )
                                                                 )         
                                                        ) 
@@ -459,7 +473,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                      tags$div(
                                                        tags$div(class="filter, cust-text",
                                                                 selectizeInput(
-                                                                  'secondStateInput_per', 'Select the second states: ', choices = c("All States", state.name, "Washington DC"), selected="All States", multiple = FALSE
+                                                                  'secondStateInput_per', 'Select the second states: ', choices = c("All States", state.name, "Washington DC"), selected="Illinois", multiple = FALSE
                                                                 )
                                                        ) 
                                                      )
@@ -471,7 +485,11 @@ ui <- fluidPage(class="p-0 m-0",
                                                        tags$div(class="filter, cust-text",
                                                                 tags$table(class="select-year",
                                                                            tags$tr(
-                                                                             tags$td(class="start-year",  numericInput(inputId="secondYearInput_per", label = "Year: ", value = 1990, min = 1990, max = 2019, step = NA))
+                                                                              tags$td(class="start-year",  
+                                                                                      selectizeInput(
+                                                                                        'secondYearInput_per', 'Year: ', choices = c("All Years", year_dist), selected="All Years", multiple = FALSE
+                                                                                      )  
+                                                                              )
                                                                            )
                                                                 )
                                                        ) 
@@ -492,7 +510,7 @@ ui <- fluidPage(class="p-0 m-0",
                                                        
                                                        tags$div(class="title",
                                                                 tags$span(
-                                                                  "First State")
+                                                                  "First Region")
                                                        ),
                                                        
                                                        fluidRow(style="margin: 2px",
@@ -533,12 +551,13 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-flag-usa"),
                                                                                   "Heat Map:"
                                                                          ),
-                                                                         tags$div(style="height: 300px",
+                                                                         tags$div(style="height: 285px",
                                                                                   shinycssloaders::withSpinner (
-                                                                                      plotOutput("firstStateHeatMap_per", height = 300)
+                                                                                      plotOutput("firstStateHeatMap_per", height = 285)
                                                                                   )
                                                                          )
-                                                                       )
+                                                                       ),
+                                                                       tags$span(style="float: right; font-size: smaller;",  "* Select a year to see the data")
                                                                 ) #Heat Map End
                                                                 
                                                        )#End of fluid row
@@ -555,7 +574,7 @@ ui <- fluidPage(class="p-0 m-0",
                                               tags$div(class="card-body",
                                                        tags$div(class="title",
                                                                 tags$span(
-                                                                  "First State")
+                                                                  "Second Region")
                                                        ),
                                                        
                                                        fluidRow(style="margin: 2px",
@@ -596,12 +615,13 @@ ui <- fluidPage(class="p-0 m-0",
                                                                                   tags$i(class="fas fa-flag-usa"),
                                                                                   "Heat Map:"
                                                                          ),
-                                                                         tags$div(style="height: 300px",
+                                                                         tags$div(style="height: 285",
                                                                                   shinycssloaders::withSpinner (
-                                                                                      plotOutput("secondStateHeatMap_per", height = 300)
+                                                                                      plotOutput("secondStateHeatMap_per", height = 285)
                                                                                   )
                                                                          )
-                                                                       )
+                                                                       ),
+                                                                       tags$span(style="float: right; font-size: smaller;",  "* Select a year to see the data")
                                                                 ) #Heat Map End
                                                                 
                                                        )#End of fluid row    
@@ -763,8 +783,45 @@ ui <- fluidPage(class="p-0 m-0",
         ), #5 Interesting Things page end
         
         #About page start
-        tabPanel("About",
-                 tableOutput("data2")
+        tabPanel("About", class="p-0",
+                 mainPanel( class="panel p-0",
+                            fluidRow(
+                              
+                              #Total Amount of Energy generation start
+                              column(12, class="p-0",
+                                     tags$div(class="card border-title shadow",
+                                              #card Start
+                                              tags$div(class="card-body",
+                                                       
+                                                       tags$div(class="title",
+                                                                tags$span(
+                                                                  "About")
+                                                       ),
+                                                       tags$div(class="p-5",
+                                                          tags$div(
+                                                            tags$span(class="cust-text-md", "Author: "),
+                                                            tags$span("Yi-Chun Chen")
+                                                          ),
+                                                          tags$div(
+                                                            tags$span(class="cust-text-md", "Date: "),
+                                                            tags$span("02.13.2020")
+                                                          ),
+                                                          tags$div(
+                                                            tags$span(class="cust-text-md", "Data Source: "),
+                                                            tags$a(href = "https://www.evl.uic.edu/aej/424/annual_generation_state.csv", "https://www.evl.uic.edu/aej/424/annual_generation_state.csv"),
+                                                          ),
+                                                          tags$div(
+                                                            tags$span(class="cust-text-md", "Git Repository: "),
+                                                            tags$a(href = "https://github.com/ychen856/cs424_project_1.git", "https://github.com/ychen856/cs424_project_1.git")
+                                                          )
+                                                       ),
+                                                       
+                                              )
+                                     )
+                              )
+                            )
+                 )
+       
         ) #About page end
     )
   ),

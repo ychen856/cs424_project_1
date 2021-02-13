@@ -1,3 +1,5 @@
+library(stringr)
+
 temp = list.files(pattern="*state.csv")
 orgData <- lapply(temp, read.csv)
 utility <- do.call(rbind, orgData)
