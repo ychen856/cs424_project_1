@@ -706,7 +706,7 @@ function(input, output, session) {
                   theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             })
             output$discription <- renderText({ 
-              "In the past two decades, the percentage of each energy source changes a lot. However, it does not seems to affect the energy usage distribution for the whole country. Therefore, I guess each state was all shifting their energy source from one to another."
+              "In the past two decades, the percentage of each energy source changes a lot (Chart 1). However, it does not seems to affect the energy usage distribution for the whole country. The color distributes in chart 2 in a different year still looked the same. Therefore, I guess each state was all shifting their energy source from one to another."
             })
         }
         if(opt == 2) {
@@ -725,7 +725,7 @@ function(input, output, session) {
             ggplot(subset(comparisonTable1_int, (ENERGY_SOURCE %in% energySource_int))) + 
               geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
               geom_point(data = comparisonTable1_int[which(comparisonTable1_int$YEAR == firstYear_int & comparisonTable1_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
-              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              scale_color_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#cccc56", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
               scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
               labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")+
               ggtitle('Percentage of Coal and Natural Gas Energy from 1990 to 2019') +
@@ -746,14 +746,14 @@ function(input, output, session) {
             ggplot(subset(comparisonTable2_int, (ENERGY_SOURCE %in% energySource_int))) + 
               geom_line(aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER, color=ENERGY_SOURCE)) + 
               geom_point(data = comparisonTable2_int[which(comparisonTable2_int$YEAR == secondYear_int & comparisonTable2_int$ENERGY_SOURCE %in% energySource_int),], aes(x=YEAR, y=GENERATION_SUM_PER_YEAR_STATE_SOURCE_PER/GENERATION_SUM_PER_YEAR_STATE_PER), colour = "#004a9f") + 
-              scale_color_manual(values = c("Coal"= "#9e0142", "Hydroelectric Conventional" = "#d53e4f", "Natural Gas" = "#f46d43", "Petroleum" = "#fdae61", "Wind" = "#de77ae", "Wood and Wood Derived Fuels" = "#9970ab", "Nuclear" = "#f46d43", "Other Biomass" = "#1a9850", "Other Gases" = "#66c2a5", "Pumped Storage" = "#3288bd", "Geothermal" = "#5e4fa2", "Other" = "#40004b", "Solar Thermal and Photovoltaic" = "#762a83")) +
+              scale_color_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#cccc56", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
               scale_y_continuous(labels = scales::percent, limits=c(0, theLineYlim_int)) +
               labs(x="YEAR", y = "AMOUNT", colour = "ENERGY SOURCE")+
               ggtitle('Percentage of Coal and Natural Gas Energy from 1990 to 2019') +
               theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$discription <- renderText({ 
-            "Natural gas was keeping replacing the coal. The amount and percentage of two energy sources crossed in 2015. It is a good thing. Since US Energy Information Administration website shows that Burning natural gas for energy results in fewer emissions of nearly all types of air pollutants and carbon dioxide (CO2) than burning coal or petroleum products to produce an equal amount of energy."  
+            "Natural gas was keeping replacing the coal. The amount (Chart 1) and percentage (Chart 2) of two energy sources crossed in 2015. It is a good thing. Since US Energy Information Administration website shows that Burning natural gas for energy results in fewer emissions of nearly all types of air pollutants and carbon dioxide (CO2) than burning coal or petroleum products to produce an equal amount of energy."  
           })
         }
         if(opt == 3) {
@@ -798,7 +798,7 @@ function(input, output, session) {
               
           })
           output$discription <- renderText({ 
-          "The amount of nuclear is increasing. It is reasonable, because nuclear is considered as a \"clean energy\", and also highly efficient. However, from the heat map, we can see some of the states used nuclear in 1990 by they did not use it anymore in 2019."  
+          "The amount of nuclear is increasing. It is reasonable, because nuclear is considered as a \"clean energy\", and also highly efficient. The amount of nuclear energy usage increased from 1990 to 2019 (Chart 1). However, from the heat map, we can see some of the states used nuclear in 1990 by they did not use it anymore in 2019 (Chart 2)."  
           })
         }
         if(opt == 4) {
@@ -843,7 +843,7 @@ function(input, output, session) {
             
           })
           output$discription <- renderText({ 
-            "The energy from wind increased. Although 600 million, compares to other energy sources, is very small, we still see that this kind of energy has become popular in most of the states from the heat map."    
+            "The energy from wind increased, although 600 million, compares to other energy sources, is very small (Chart 1). we still see that this kind of energy has become popular in most of the states from 1990 to 2019 (Chart 2)."    
           })
         }
         if(opt == 5) {
@@ -883,7 +883,7 @@ function(input, output, session) {
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$discription <- renderText({ 
-            "The energy usage of Texas keeps increasing. From data 1 chart 2, we can see that the total energy usage in the US is almost saturation, so did most of the states. However, in Texas, we do not discover this sign. The amount of energy usage did not even slow down."
+            "The energy usage of Texas keeps increasing. From data 1 chart 2, we can see that the total energy usage in the US is almost saturation, so did most of the states. However, in Texas, we do not discover this sign. The increasing amount of energy usage did not even slow down (Data 2 Chart 1). In Chart 2, we can see, the color of most states does not change a lot, but Texas seems to increase about 1/3."
           })
       }
     }   
