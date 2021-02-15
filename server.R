@@ -855,7 +855,7 @@ function(input, output, session) {
               labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
               lims(y=c(0, theStackYlim_int_amt)) +
               scale_y_continuous(labels = scales::comma)+
-              ggtitle('Energy Usage in US from 1990 to 2019') +
+              ggtitle('Energy Generation in US from 1990 to 2019') +
               theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$interestingChart1_2 <- renderPlot({
@@ -863,7 +863,7 @@ function(input, output, session) {
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
             heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount")+
-              ggtitle('1990 Total Energy Usage in US') +
+              ggtitle('1990 Total Energy Generation in US') +
               theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$interestingChart2_1 <- renderPlot({
@@ -873,14 +873,14 @@ function(input, output, session) {
               labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
               lims(y=c(0, theStackYlim_int_amt)) +
               scale_y_continuous(labels = scales::comma) +
-              ggtitle('Energy Usage in TX from 1990 to 2019') +
+              ggtitle('Energy Generation in TX from 1990 to 2019') +
               theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$interestingChart2_2 <- renderPlot({
               p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
                 theme(legend.position = "right")
               heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
-                ggtitle('2019 Total Energy Usage in US') +
+                ggtitle('2019 Total Energy Generation in US') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$discription <- renderText({ 
