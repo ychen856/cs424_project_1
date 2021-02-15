@@ -799,7 +799,7 @@ function(input, output, session) {
               
           })
           output$discription <- renderText({ 
-          "The amount of nuclear is increasing. It is reasonable, because nuclear is considered as a \"clean energy\", and also highly efficient. The amount of nuclear energy usage increased from 1990 to 2019 (Chart 1). However, from the heat map, we can see some of the states used nuclear in 1990 by they did not use it anymore in 2019 (Chart 2)."  
+          "The amount of nuclear is increasing. It is reasonable, because nuclear is considered as a \"clean energy\", and also highly efficient. The amount of nuclear energy production increased from 1990 to 2019 (Chart 1). However, from the heat map, we can see some of the states used nuclear as an energy sourcein 1990 by they did not use it anymore in 2019 (Chart 2)."  
           })
         }
         if(opt == 4) {
@@ -884,7 +884,7 @@ function(input, output, session) {
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
           output$discription <- renderText({ 
-            "The energy usage of Texas keeps increasing. From data 1 chart 2, we can see that the total energy usage in the US is almost saturation, so did most of the states. However, in Texas, we do not discover this sign. The increasing amount of energy usage did not even slow down (Data 2 Chart 1). In Chart 2, we can see, the color of most states does not change a lot, but Texas seems to increase about 1/3."
+            "The energy production of Texas keeps increasing. From data 1 chart 2, we can see that the total energy production in the US is almost saturation, so did most of the states. However, in Texas, we do not discover this sign. The increasing amount of energy production did not even slow down (Data 2 Chart 1). In Chart 2, we can see, the color of most states does not change a lot, but Texas seems to increase about 1/3."
           })
       }
     }   
