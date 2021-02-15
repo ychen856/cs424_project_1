@@ -237,8 +237,8 @@ function(input, output, session) {
               geom_bar(position="stack" , stat="identity") + 
               scale_fill_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#cccc56", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
               labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
-              lims(y=c(0, theStackYlim)) +
-              scale_y_continuous(labels = scales::comma) +
+              #lims(y=c(0, theStackYlim)) +
+              scale_y_continuous(labels = scales::comma, limits = c(0, theStackYlim)) +
               scale_x_continuous(limits = c(1989, 2020))
         })
         
@@ -246,7 +246,7 @@ function(input, output, session) {
         output$firstStateHeatMap <- renderPlot({
             p_firstState <- plot_usmap(data = heatMapDataState1, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
-            heatMapLegend(p_firstState, theHeatLegendLim, "amount")
+            heatMapLegend(input$energySourceInputCom, p_firstState, theHeatLegendLim, "amount")
             
         })
         
@@ -270,7 +270,8 @@ function(input, output, session) {
             geom_bar(position="stack" , stat="identity") + 
             scale_fill_manual(values = c("Coal"= "#004949", "Hydroelectric Conventional" = "#009292", "Natural Gas" = "#ff6db6", "Petroleum" = "#ffb6db", "Wind" = "#490092", "Wood and Wood Derived Fuels" = "#006ddb", "Nuclear" = "#b66dff", "Other Biomass" = "#6db6ff", "Other Gases" = "#cccc56", "Pumped Storage" = "#920000", "Geothermal" = "#924900", "Other" = "#db6d00", "Solar Thermal and Photovoltaic" = "#24ff24")) +
             labs(x="YEAR", y = "AMOUNT (Million)", fill = "ENERGY SOURCE") +
-            lims(y=c(0, theStackYlim)) +
+            #lims(y=c(0, theStackYlim)) +
+            scale_y_continuous(labels = scales::comma, limits = c(0, theStackYlim)) +
             scale_x_continuous(limits = c(1989, 2020))
         })
         
@@ -278,7 +279,7 @@ function(input, output, session) {
         output$secondStateHeatMap <- renderPlot({
           p_secondState <- plot_usmap(data = heatMapDataState2, values = "GENERATION_SUM_PER_STATE_Milli") + 
             theme(legend.position = "right")
-          heatMapLegend(p_secondState, theHeatLegendLim, "amount")
+          heatMapLegend(input$energySourceInputCom, p_secondState, theHeatLegendLim, "amount")
           
         })
     }
@@ -372,8 +373,8 @@ function(input, output, session) {
       comparisonTable_per$GENERATION_SUM_BY_CAT_ENERGY_SOURCE_PER_YEAR <- NULL
       
       if(input$fisrtStateInput_per != "All States") {
-          comparisonTable_per <- subset(comparisonTable_per, STATE %in% theFirstStateInput_per)
-          comparisonTable1_per <- comparisonTable_per[!duplicated(comparisonTable_per),]
+          comparisonTable1_per <- subset(comparisonTable_per, STATE %in% theFirstStateInput_per)
+          comparisonTable1_per <- comparisonTable1_per[!duplicated(comparisonTable1_per),]
       }
       else {
           comparisonTable1_per <- statistic
@@ -382,8 +383,8 @@ function(input, output, session) {
       }
       
       if(input$secondStateInput_per != "All States") {
-        comparisonTable_per <- subset(comparisonTable_per, STATE %in% theSecondStateInput_per)
-        comparisonTable2_per <- comparisonTable_per[!duplicated(comparisonTable_per),]
+        comparisonTable2_per <- subset(comparisonTable_per, STATE %in% theSecondStateInput_per)
+        comparisonTable2_per <- comparisonTable2_per[!duplicated(comparisonTable2_per),]
       }
       else {
         comparisonTable2_per <- statistic
@@ -456,12 +457,12 @@ function(input, output, session) {
       output$firstStateHeatMap_per <- renderPlot({
           p_firstState <- plot_usmap(data = heatMapDataState1_per, values = "GENERATION_RATIO_STATE_SOURCE") + 
             theme(legend.position = "right")
-          if(input$energySourceInputCom_per == "All") {
-            heatMapLegend(p_firstState, NA, "percentage")
-          } 
-          else {
-            heatMapLegend(p_firstState, theHeatLegendLim, "percentage")
-          }
+          #if(input$energySourceInputCom_per == "All") {
+          #  heatMapLegend(p_firstState, NA, "percentage")
+          #} 
+          #else {
+            heatMapLegend(input$energySourceInputCom_per, p_firstState, theHeatLegendLim, "percentage")
+          #}
       })
       
       
@@ -493,12 +494,12 @@ function(input, output, session) {
       output$secondStateHeatMap_per <- renderPlot({
         p_secondState_per <- plot_usmap(data = heatMapDataState2_per, values = "GENERATION_RATIO_STATE_SOURCE") + 
           theme(legend.position = "right")
-        if(input$energySourceInputCom_per == "All") {
-            heatMapLegend(p_secondState_per, NA, "percentage")
-        } 
-        else {
-            heatMapLegend(p_secondState_per, theHeatLegendLim, "percentage")
-        }
+        #if(input$energySourceInputCom_per == "All") {
+        #    heatMapLegend(p_secondState_per, NA, "percentage")
+        #} 
+        #else {
+            heatMapLegend(input$energySourceInputCom_per, p_secondState_per, theHeatLegendLim, "percentage")
+        #}
       })
     }
     
@@ -683,7 +684,7 @@ function(input, output, session) {
                 p_firstState <- plot_usmap(data = heatMapDataState1_int, values = "GENERATION_RATIO_STATE_SOURCE") + 
                   theme(legend.position = "right")
               
-                heatMapLegend(p_firstState, theHeatLegendLim_int, "percentage")+
+                heatMapLegend(energySource_int, p_firstState, theHeatLegendLim_int, "percentage")+
                   ggtitle('Amount of Energy Source in Each State 1990') +
                   theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             })
@@ -701,7 +702,7 @@ function(input, output, session) {
                 p_secondState_int <- plot_usmap(data = heatMapDataState2_int, values = "GENERATION_RATIO_STATE_SOURCE") + 
                   theme(legend.position = "right")
               
-                heatMapLegend(p_secondState_int, theHeatLegendLim_int, "percentage")+
+                heatMapLegend(energySource_int, p_secondState_int, theHeatLegendLim_int, "percentage")+
                   ggtitle('Amount of Energy Source in Each State 2019') +
                   theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             })
@@ -771,7 +772,7 @@ function(input, output, session) {
           output$interestingChart1_2 <- renderPlot({
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
-              heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")+
+              heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount")+
               scale_fill_continuous(low = "white", high = "#9057c9")+
                 ggtitle('Amount of Neclear Energy in Each State 1990') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
@@ -791,7 +792,7 @@ function(input, output, session) {
           output$interestingChart2_2 <- renderPlot({
               p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
                 theme(legend.position = "right")
-                heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount") +
+                heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
                 scale_fill_continuous(low = "white", high = "#9057c9")+
                   ggtitle('Amount of Neclear Energy in Each State 2019') +
                   theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
@@ -816,7 +817,7 @@ function(input, output, session) {
           output$interestingChart1_2 <- renderPlot({
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
-              heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount") +
+              heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
               scale_fill_continuous(low = "white", high = "#490092")+
                 ggtitle('Amount of Wind Energy in Each State 1990') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
@@ -836,7 +837,7 @@ function(input, output, session) {
           output$interestingChart2_2 <- renderPlot({
             p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
-              heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount") +
+              heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
               scale_fill_continuous(low = "white", high = "#490092")+
                 ggtitle('Amount of Wind Energy in Each State 2019') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
@@ -861,7 +862,7 @@ function(input, output, session) {
             
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
-            heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount")+
+            heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount")+
               ggtitle('1990 Total Energy Usage in US') +
               theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
@@ -878,7 +879,7 @@ function(input, output, session) {
           output$interestingChart2_2 <- renderPlot({
               p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
                 theme(legend.position = "right")
-              heatMapLegend(p_secondState, theHeatLegendLim_int_amt, "amount") +
+              heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
                 ggtitle('2019 Total Energy Usage in US') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
           })
@@ -894,47 +895,47 @@ function(input, output, session) {
     secondYear_int <- 2019
     generatePlot_int(energySource_int, firstState_int, firstYear_int, secondState_int, secondYear_int , 1)
     
-    heatMapLegend <- function(p_firstState, theHeatLegendLim, type) {
-      if(input$energySourceInputCom == "All") {
+    heatMapLegend <- function(energySource_color, p_firstState, theHeatLegendLim, type) {
+      if(energySource_color == "All") {
         p_firstState + scale_fill_continuous(low = "white", high = "#004a9f", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Coal") {
+      else if (energySource_color == "Coal") {
         p_firstState + scale_fill_continuous(low = "white", high = "#004949", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Hydroelectric Conventional") {
+      else if (energySource_color == "Hydroelectric Conventional") {
         p_firstState + scale_fill_continuous(low = "white", high = "#016969", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Natural Gas") {
+      else if (energySource_color == "Natural Gas") {
         p_firstState + scale_fill_continuous(low = "white", high = "#cc3783", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Petroleum") {
+      else if (energySource_color == "Petroleum") {
         p_firstState + scale_fill_continuous(low = "white", high = "#ff4aa6", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Wind") {
+      else if (energySource_color == "Wind") {
         p_firstState + scale_fill_continuous(low = "white", high = "#490092", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Wood and Wood Derived Fuels") {
+      else if (energySource_color == "Wood and Wood Derived Fuels") {
         p_firstState + scale_fill_continuous(low = "white", high = "#005dba", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Nuclear") {
+      else if (energySource_color == "Nuclear") {
         p_firstState + scale_fill_continuous(low = "white", high = "#9057c9", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Other Biomass") {
+      else if (energySource_color == "Other Biomass") {
         p_firstState + scale_fill_continuous(low = "white", high = "#258ef7", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Other Gases") {
+      else if (energySource_color == "Other Gases") {
         p_firstState + scale_fill_continuous(low = "white", high = "#cccc56", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Pumped Storage") {
+      else if (energySource_color == "Pumped Storage") {
         p_firstState + scale_fill_continuous(low = "white", high = "#920000", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Geothermal") {
+      else if (energySource_color == "Geothermal") {
         p_firstState + scale_fill_continuous(low = "white", high = "#924900", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Other") {
+      else if (energySource_color == "Other") {
         p_firstState + scale_fill_continuous(low = "white", high = "#db6d00", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
-      else if (input$energySourceInputCom == "Solar Thermal and Photovoltaic") {
+      else if (energySource_color == "Solar Thermal and Photovoltaic") {
         p_firstState + scale_fill_continuous(low = "white", high = "#18cc18", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else {
