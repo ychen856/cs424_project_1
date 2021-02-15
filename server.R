@@ -773,7 +773,7 @@ function(input, output, session) {
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
               heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount")+
-              scale_fill_continuous(low = "white", high = "#9057c9")+
+              #scale_fill_continuous(low = "white", high = "#9057c9")+
                 ggtitle('Amount of Neclear Energy in Each State 1990') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             
@@ -793,7 +793,7 @@ function(input, output, session) {
               p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
                 theme(legend.position = "right")
                 heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
-                scale_fill_continuous(low = "white", high = "#9057c9")+
+                #scale_fill_continuous(low = "white", high = "#9057c9")+
                   ggtitle('Amount of Neclear Energy in Each State 2019') +
                   theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
               
@@ -818,7 +818,7 @@ function(input, output, session) {
             p_secondState <- plot_usmap(data = heatMapDataState1_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
               heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
-              scale_fill_continuous(low = "white", high = "#490092")+
+              #scale_fill_continuous(low = "white", high = "#490092")+
                 ggtitle('Amount of Wind Energy in Each State 1990') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             
@@ -838,7 +838,7 @@ function(input, output, session) {
             p_secondState <- plot_usmap(data = heatMapDataState2_int_amt, values = "GENERATION_SUM_PER_STATE_Milli") + 
               theme(legend.position = "right")
               heatMapLegend(energySource_int, p_secondState, theHeatLegendLim_int_amt, "amount") +
-              scale_fill_continuous(low = "white", high = "#490092")+
+              #scale_fill_continuous(low = "white", high = "#490092")+
                 ggtitle('Amount of Wind Energy in Each State 2019') +
                 theme(plot.title = element_text(size=15, face = "bold", hjust=0.5))
             
@@ -897,46 +897,46 @@ function(input, output, session) {
     
     heatMapLegend <- function(energySource_color, p_firstState, theHeatLegendLim, type) {
       if(energySource_color == "All") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#004a9f", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#004a9f", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Coal") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#004949", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#004949", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Hydroelectric Conventional") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#016969", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#016969", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Natural Gas") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#cc3783", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#cc3783", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Petroleum") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#ff4aa6", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#ff4aa6", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Wind") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#490092", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#490092", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Wood and Wood Derived Fuels") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#005dba", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#005dba", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Nuclear") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#9057c9", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#9057c9", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Other Biomass") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#258ef7", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#258ef7", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Other Gases") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#cccc56", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#cccc56", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Pumped Storage") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#920000", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#920000", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Geothermal") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#924900", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#924900", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Other") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#db6d00", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#db6d00", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else if (energySource_color == "Solar Thermal and Photovoltaic") {
-        p_firstState + scale_fill_continuous(low = "white", high = "#18cc18", name = "AMOUNT (Million)", label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
+        p_firstState + scale_fill_continuous(low = "white", high = "#18cc18", name = ifelse(type == "amount", "AMOUNT (Million)", "AMOUNT"), label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
       }
       else {
         p_firstState + scale_fill_continuous(label = ifelse(type == "amount", scales::comma, scales::percent), limits = c(0, theHeatLegendLim))
